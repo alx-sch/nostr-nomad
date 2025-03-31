@@ -2,10 +2,14 @@
 	"name": "Codespaces - 42 Setup",
 	"image": "mcr.microsoft.com/vscode/devcontainers/python:3",
 	"postCreateCommand": "sudo apt-get update && sudo apt-get install -y bc valgrind libbsd-dev && sudo python3 -m pip install --upgrade pip setuptools && sudo python3 -m pip install norminette",
-	"extensions": [
-		"ms-python.python"
-	],
-	"settings": {
-		"python.pythonPath": "/usr/local/bin/python3"
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"ms-python.python"
+			],
+			"settings": {
+				"python.pythonPath": "/usr/local/bin/python3"
+			}
+		}
 	}
 }
