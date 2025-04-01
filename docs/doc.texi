@@ -3,7 +3,7 @@
 @settitle Nostr-Nomad Documentation
 
 @node Top
-@section nostr-nomad  @c No number here for the project title
+@chapheading nostr-nomad
 
 @node Introduction
 @section Introduction
