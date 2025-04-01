@@ -1,7 +1,7 @@
 {
 	"name": "Nostr Python Dev",
 	"image": "mcr.microsoft.com/devcontainers/python:3.11-bookworm",
-	"postCreateCommand": "python3 -m venv venv && . venv/bin/activate && pip install --upgrade pip && pip install -r requirements.txt",
+	"postCreateCommand": "sudo apt update && sudo apt install texinfo -y",
 	"customizations": {
 	  "vscode": {
 		"settings": {

@@ -1,0 +1,38 @@
+\input texinfo   @c -*-texinfo-*-
+@setfilename myproject.info
+@settitle My Project Documentation
+
+@node Top
+@chapter My Project
+
+This is the documentation for My Project.
+
+@node Introduction
+@section Introduction
+
+This tool does X, Y, and Z.
+
+@node Installation
+@section Installation
+
+To install, run:
+
+@example
+make install
+@end example
+
+@node Usage
+@section Usage
+
+To use this tool:
+
+@example
+mytool --help
+@end example
+
+@node Thanks
+@section Thanks
+
+Thanks for using My Project!
+
+@bye
