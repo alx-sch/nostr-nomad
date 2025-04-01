@@ -8,13 +8,16 @@ PYTHON :=		python3
 VENV :=			env
 ACTIVATE :=		. $(VENV)/bin/activate
 
-# Folder to store exported substack data
-EXPORT :=		export
 SRC :=			src
 SRCS :=			$(wildcard $(SRC)/*.py)
 
+# Folder to store exported substack data
+EXPORT :=		export
+
+# Documentation
 DOCS := docs
 TEXINFO := $(DOCS)/doc.texi
+BUILD_DIR := build_docs
 README := README.md
 
 ######################
@@ -56,7 +59,7 @@ run: $(VENV)/bin/activate $(SRCS)
 #################
 
 # Generate documentation
-docs: texinfo sphinx
+docs: $(README) texinfo sphinx
 
 # Generate README.md from Texinfo
 $(README): $(TEXINFO)
@@ -67,15 +70,20 @@ $(README): $(TEXINFO)
 # Generate Texinfo documentation
 texinfo: $(TEXINFO)
 	@echo "$(BOLD)$(YELLOW)Generating Texinfo documentation...$(RESET)"
-	@makeinfo --output=$(DOCS)/doc.info $(TEXINFO)
-	@makeinfo --html --output=$(DOCS)/html $(TEXINFO)
-	@texi2pdf -o $(DOCS)/doc.pdf $(TEXINFO)
+	@mkdir -p $(BUILD_DIR)
+	@makeinfo --output=$(BUILD_DIR)/doc.info $(TEXINFO)
+	@makeinfo --html --output=$(BUILD_DIR)/html $(TEXINFO)
+	@texi2pdf -o $(BUILD_DIR)/doc.pdf $(TEXINFO)
+	@mv doc.aux $(DOCS)/doc.aux
+	@mv doc.toc $(DOCS)/doc.toc
+	@mv doc.log $(DOCS)/doc.log
 	@echo "$(BOLD)$(GREEN)Done.$(RESET)"
 
 # Generate Sphinx documentation (for Python code)
 sphinx:
 	@echo "$(BOLD)$(YELLOW)Generating Sphinx documentation...$(RESET)"
-	@$(ACTIVATE) && sphinx-build -b html $(DOCS)/sphinx/source $(DOCS)/sphinx/build
+	@mkdir -p $(BUILD_DIR)/sphinx
+	@$(ACTIVATE) && sphinx-build -b html $(DOCS)/sphinx/source $(BUILD_DIR)/sphinx
 	@echo "$(BOLD)$(GREEN)Done.$(RESET)"
 
 ##################
@@ -94,8 +102,7 @@ clean-env:
 # Remove only generated documentation
 clean-docs:
 	@echo "$(BOLD)$(YELLOW)Cleaning up documentation...$(RESET)"
-	@rm -rf $(DOCS)/sphinx/build
-	@rm -rf $(DOCS)/html $(DOCS)/*.info $(DOCS)/*.pdf
+	@rm -rf $(BUILD_DIR)
 	@rm -f $(README)
 	@echo "$(BOLD)$(GREEN)Done.$(RESET)"
 
@@ -103,7 +110,7 @@ clean-docs:
 clean-cache:
 	@echo "$(BOLD)$(YELLOW)Cleaning up cache...$(RESET)"
 	@rm -rf $(SRC)/__pycache__
-	@rm -f doc.aux doc.toc doc.log
+	@rm -f $(DOCS)/doc.aux $(DOCS)/doc.toc $(DOCS)/doc.log
 	@rm -rf $(EXPORT)/unzipped
 	@echo "$(BOLD)$(GREEN)Done.$(RESET)"
 
