@@ -1,10 +1,7 @@
 {
 	"name": "Nostr Python Dev",
-	"image": "mcr.microsoft.com/devcontainers/python:3.11",
-	"features": {
-	  "python": "latest"
-	},
-	"postCreateCommand": "python3 -m venv venv && source venv/bin/activate && pip install --upgrade pip && pip install -r requirements.txt",
+	"image": "mcr.microsoft.com/devcontainers/python:3.11-bookworm",
+	"postCreateCommand": "python3 -m venv venv && . venv/bin/activate && pip install --upgrade pip && pip install -r requirements.txt",
 	"customizations": {
 	  "vscode": {
 		"settings": {
@@ -17,4 +14,4 @@
 	  }
 	},
 	"remoteUser": "vscode"
-  }
+}
