@@ -1,7 +1,7 @@
 {
 	"name": "Nostr Python Dev",
 	"image": "mcr.microsoft.com/devcontainers/python:3.11-bookworm",
-	"postCreateCommand": "sudo apt update && sudo apt install texinfo -y",
+	"postCreateCommand": "sudo apt update && sudo apt install texinfo -y texlive -y",
 	"customizations": {
 	  "vscode": {
 		"settings": {

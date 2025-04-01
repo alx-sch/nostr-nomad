@@ -1,5 +1,2 @@
-confini         # Parse and load configuration settings for the tools. (WTFPL License)
-requests
-websockets     
-markdown    
-beautifulsoup4  #  # Mature html parser module, giving full control of all elements using python objects and methods. (MIT License).
+beautifulsoup4==4.13.3
+sphinx==8.2.3
