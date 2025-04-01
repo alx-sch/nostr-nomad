@@ -3,67 +3,62 @@
 @settitle Nostr-Nomad Documentation
 
 @node Top
-@chapter Project
-
-This is the documentation for project **nostr-nomad**.
+@section nostr-nomad  @c No number here for the project title
 
 @node Introduction
 @section Introduction
 
-This tool allows users to migrate content from **substack.com** to **nostr**.
+This tool allows users to migrate content from **Substack** to **Nostr**.
 
-@node Installation
-@section Installation
+@node Requirements
+@section Requirements
 
-### Requirements
-
-To generate documentation with `make`, you need to install **Texinfo** and **TeX**:
+To generate documentation using 'make', you need to install **Texinfo** and **TeX**:
 
 - **Ubuntu/Debian**: `sudo apt install texinfo texlive -y`
 
-Additionally, you will need **Python 3** (version 3.11.x) and its dependencies, which will be automatically installed in a virtual environment when you set up the project.
+Additionally, you will need **Python 3** (version 3.11.x) and its dependencies. The tool will automatically install its dependencies within a virtual environment when you set up the project.
 
-### Setting up the project
+@node Using the tool
+@section Using the tool
 
-Follow these steps to set up the project:
+Follow these steps to set up and run the project:
 
-1. **Clone the repository**:
+@subsection Clone the repository
 
 @example
 git clone XXXXX.git nostr-nomad
 cd nostr-nomad
 @end example
 
-2. **Provide substack export**:
+@subsection Provide Substack export
 
-Place your substack export data (`.zip` file) into the `export/` folder in the project directory.
+Place your Substack export data (`.zip` file) into the `export/` folder in the project directory.  
 This will allow the tool to process the data correctly.
 
-3. **Run the tool**:
+@subsection Run the tool
 
-### Setting up your Git repository
-
-You can run the tool by simply executing the following in the project's root directory:
+Run the following command in the project's root directory:
 
 @example
 make
 @end example
 
 This will:
-
 1. Create and activate the virtual environment (stored in the `env` folder).
 2. Execute the main script.
-3. Generate the documentation: `README.md` and placing all other generated documentation in the `build_docs` directory.
+3. Generate the documentation: `README.md` and place all other generated documentation in the `build_docs` directory.
 
-After running `make`, the tool will process the provided substack export data and generate the desired outputs automatically (TBD what output is).
+After running `make`, the tool will process the provided Substack export data and generate the desired outputs automatically *(TBD what output is)*.
 
-4. **Clean up**:
+@subsection Clean up
 
-To remove generated files, you can use the `make clean` command. This will:
+To remove generated files, you can use the `make clean` command.
 
+This will:
 1. Remove the virtual environment.
 2. Clean up generated documentation.
-3. Clear cache files, such as Python bytecode and other temporary data.
+3. Clear cache files like Python bytecode and other temporary data.
 
 @node Thanks
 @section Thanks
