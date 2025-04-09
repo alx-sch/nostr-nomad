@@ -85,7 +85,7 @@ Before going public, you can test the `nostr-nomad` tool by publishing to your l
    cargo --version
    ```
    
-2. **Clone the `nostr-rs-relay` Repository**
+2. **Clone the `nostr-rs-relay` Repository**    
    Now, you’ll clone the `nostr-rs-relay` repository to your local machine. This repository contains the source code for the relay server.
 
    ```bash
@@ -99,7 +99,27 @@ Before going public, you can test the `nostr-nomad` tool by publishing to your l
    cargo build --release
    ```
 
-4. 
+4. **Edit Configuration for the Local Relay**    
+   In your `config.toml` file, change the following fields to set up a local Nostr relay:
+   ```toml
+   [info]
+   relay_url = "wss://localhost"   # WebSocket relay running on your local machine (localhost).
+
+   [network]
+   address = "127.0.0.1"           # Or any other appropriate loopback IP, 127.0.0.1 is usually used as localhost.
+   port = 8081                     # Or any other unused port.
+   ```
+
+5. **Starting the Nostr Relay**    
+   Before running the relay, you need to create the database directory first (`mkdir db`). The relay will store data such as events and connections here.    
+   Once the database directory is created, you can start the relay by running the following command. This will provide detailed log output:
+    ```bash
+   RUST_LOG=debug ./target/release/nostr-rs-relay -c config.toml -d db
+   ```
+
+   The relay should begin running, and you’ll see status updates in the terminal. This confirms that the relay is active and listening for WebSocket connections. Leave the terminal window open to keep the relay running. To interact with the relay, use `nostr-nomad` or other testing methods through a separate terminal window.
+   
+   <img src="https://github.com/alx-sch/nostr-nomad/blob/main/.assets/relay_running.png" width="800"/>
 
 
    
