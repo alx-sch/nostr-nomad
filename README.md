@@ -128,7 +128,7 @@ Before going public, you can test the `nostr-nomad` tool by publishing to your l
      
    For adding the local Nostr relay to Gossip, refer to this helpful [blog post](https://manbytesgnu.org/hello-nostr-with-python.html).
 
-   For a quick setup of the Iris client, you can use the standalone [desktop release](https://github.com/irislib/iris-messenger/releases). After installation and signing up:
+   For a quick setup of the iris client, you can use the standalone [desktop release](https://github.com/irislib/iris-messenger/releases). After installation and signing up:
    
    - Go to **Settings** -> **Network**.
    - Add `ws://localhost:8081` as a new relay.
