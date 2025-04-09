@@ -102,15 +102,14 @@ Before going public, you can test the `nostr-nomad` tool by publishing to your l
 4. **Edit Configuration for the Local Relay**    
    In your `config.toml` file, change the following fields to set up a local Nostr relay:
    ```toml
-   [info]
-   relay_url = "wss://localhost"   # WebSocket relay running on your local machine (localhost).
-
    [network]
    address = "127.0.0.1"           # Or any other appropriate loopback IP, 127.0.0.1 is usually used as localhost.
-   port = 8081                     # Or any other unused port.
+   port = 8081                     # Use any available port; 8081 is commonly used for development/testing.
    ```
 
-5. **Starting the Nostr Relay**    
+   Since this is for local testing, we will not enable WSS (secure WebSocket). This avoids the need to generate SSL/TLS certificates or configure encryption — keeping the setup simple and focused. The relay will run at: `ws://127.0.0.1:8081` or simply `ws://localhost:8081` (confirm that `localhost` points to `127.0.0.1` by running `ping localhost`).
+
+6. **Starting the Nostr Relay**    
    Before running the relay, you need to create the database directory first (`mkdir db`). The relay will store data such as events and connections here.    
    Once the database directory is created, you can start the relay by running the following command. This will provide detailed log output:
     ```bash
@@ -120,6 +119,10 @@ Before going public, you can test the `nostr-nomad` tool by publishing to your l
    The relay should begin running, and you’ll see status updates in the terminal. This confirms that the relay is active and listening for WebSocket connections. Leave the terminal window open to keep the relay running. To interact with the relay, use `nostr-nomad` or other testing methods through a separate terminal window.
    
    <img src="https://github.com/alx-sch/nostr-nomad/blob/main/.assets/relay_running.png" width="800"/>
+
+7. **Checking messages of the local Nostr Relay**
+
+   You can use any Nostr client of your choice that allows for the inc
 
 
    
