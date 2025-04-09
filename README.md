@@ -120,10 +120,22 @@ Before going public, you can test the `nostr-nomad` tool by publishing to your l
    
    <img src="https://github.com/alx-sch/nostr-nomad/blob/main/.assets/relay_running.png" width="800"/>
 
-7. **Checking messages of the local Nostr Relay**
+7. **Checking Messages of the Local Nostr Relay**
 
-   You can use any Nostr client of your choice that allows for the inc
+   You can use any Nostr client that allows for the inclusion of local relays. For example:
+   - [Gossip](https://github.com/mikedilger/gossip)
+   - [iris](https://github.com/irislib/iris-messenger)
+     
+   For adding the local Nostr relay to Gossip, refer to this helpful [blog post](https://manbytesgnu.org/hello-nostr-with-python.html).
 
+   For a quick setup of the Iris client, you can use the standalone [desktop release](https://github.com/irislib/iris-messenger/releases). After installation and signing up:
+   
+   - Go to **Settings** -> **Network**.
+   - Add `ws://localhost:8081` as a new relay.
+   - Uncheck any other relays you might have subscribed to (to keep the feed focused on the local relay).
+   - Check the feed (house symbol).
+
+   If everything is set up correctly, you should now see events published to your local Nostr relay.
 
    
    
