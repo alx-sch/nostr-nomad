@@ -45,7 +45,7 @@ To generate documentation using `make docs`, you need to install **Texinfo** and
 - `make` to build and execute the tool.
 - `make docs` to generate the documentation for the project.
 - `make clean` to remove compiled files, the virtual environment, and documentation.
-- `make clean-all` to also remove the cache (user_input/), keeping track of the publishing history and avoiding duplication of the same post to the same relay.
+- `make clean-all` to also remove the cache (in `user_input/`), keeping track of the publishing history and avoiding duplication of the same post to the same relay.
 
 --- 
 
