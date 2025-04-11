@@ -4,67 +4,52 @@
     <img src="https://github.com/alx-sch/nostr-nomad/blob/main/.assets/nostr-nomad.png"  alt="nostr-nomad.png" width="500"/>
 </p>
 
-This tool allows users to migrate content from **Substack** to **Nostr** relays.    
-`nostr-nomad` is a collaboration between **[Natalie](https://github.com/busedame)** and **[Alex](https://github.com/alx-sch)**.
+`nostr-nomad` migrates content from **Substack** to **Nostr** relays.    
+This project is a collaboration between **[Natalie](https://github.com/busedame)** and **[Alex](https://github.com/alx-sch)**.
+
+---
 
 ## Requirements
 
-To generate documentation using `make docs`, you need to install **Texinfo** and **TeX**:
+You need **Python 3** (version 3.7.x or higher) to compile the project.  
+All Python dependencies will be automatically installed within the isolated virtual environment `env`. 
+
+To generate documentation using `make docs`, you need to install **Texinfo** and **TeX** first:
 
    - **Ubuntu/Debian**: `sudo apt install texinfo texlive -y`
+   - **macOS**: `brew install texinfo texlive`
 
-Additionally, you will need **Python 3** (version 3.7.x or higher).     
-When you set up the project, the tool will automatically install its dependencies within a virtual environment.
+---
 
-3 Using the tool
-================
+## How to Use
 
-Follow these steps to set up and run the project:
+1. First, clone the repository and navigate into the project directory:  
+   ```
+   git clone https://github.com/alx-sch/nostr-nomad nostr-nomad && nostr-nomad
+   ```
+   
+2. Provide Substack Export:
+ - Export your Substack data (check [here](https://support.substack.com/hc/en-us/articles/360037466012-How-do-I-export-my-posts))
+ - Unzip the archive and remove any posts you don’t want to migrate by deleting the corresponding `.html` files in the `posts/` folder.
+ - Place the unzipped export folder into `user_input/export/`. It should contain a `posts.csv` file and a `posts/` directory with your `.html` files.
 
-3.1 Clone the repository
-------------------------
+3. Provide Key and Relays
+ - Add your private key (in hex or nsec format) and the relays you'd like to publish to in the `config.toml` file in `user_input/`.
+ - The private key is used **only** to sign Nostr events and is **never shared**.
+ - If you prefer, you can leave the private key empty (`""`) to generate a random key at runtime.
+ - You can generate a random private key at runtime as well, if you like to XXX (set private key to "").
+    - ⚠️ Note: Some relays may require prior authorization and might reject events from unknown keys.
 
-     git clone XXXXX.git nostr-nomad
-     cd nostr-nomad
+4. Run `nostr-nomad`
+   Once everything is set up, you can run the following commands:
+- `make` to build and execute the tool.
+- `make docs` to generate the documentation for the project.
+- `make clean` to remove compiled files, the virtual environment, and documentation.
+- `make clean-all` to also remove the cache (user_input/), keeping track of the publishing history and avoiding duplication of the same post to the same relay.
 
-3.2 Provide Substack export
----------------------------
+--- 
 
-Place your Substack export data ('.zip' file) into the 'export/' folder
-in the project directory.  This will allow the tool to process the data
-correctly.
-
-3.3 Run the tool
-----------------
-
-Run the following command in the project's root directory:
-
-     make
-
-   This will: 1.  Create and activate the virtual environment (stored in
-the 'env' folder).  2.  Execute the main script.  3.  Generate the
-documentation: 'README.md' and place all other generated documentation
-in the 'build_docs' directory.
-
-   After running 'make', the tool will process the provided Substack
-export data and generate the desired outputs automatically *(TBD what
-output is)*.
-
-3.4 Clean up
-------------
-
-To remove generated files, you can use the 'make clean' command.
-
-   This will: 1.  Remove the virtual environment.  2.  Clean up
-generated documentation.  3.  Clear cache files like Python bytecode and
-other temporary data.
-
-4 Thanks
-========
-
-Thanks for using nostr-nomad!
-
-## Setting up a local Nostr relay for testing
+## Setting up a Local Nostr Relay for Testing
 
 This [blog post](https://manbytesgnu.org/hello-nostr-with-python.html) by [lash](https://github.com/nolash) is an excellent guide for setting up a local Nostr relay and publishing a message (or event) to it.
 Before going public, you can test the `nostr-nomad` tool by publishing to your local relay.
