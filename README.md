@@ -8,8 +8,8 @@
 This project is a collaboration between **[Natalie](https://github.com/busedame)** and **[Alex](https://github.com/alx-sch)**.
 
 Supports:
-- Short-form content (event `kind:1`; [NIP-1](https://nostr-nips.com/nip-01)), such as "Tweet"-style messages.
-- **WIP:** Long-form content (event `kind:30023`; [NIP-23](https://nostr-nips.com/nip-23)), such as blog posts.
+- Short-form content (event `kind:1`; [NIP-1](https://nostr-nips.com/nip-01)) — such as "Tweet"-style messages (no formatting).
+- **WIP:** Long-form content (event `kind:30023`; [NIP-23](https://nostr-nips.com/nip-23)) — such as blog posts (with Markdown formatting).
 
 ---
 
