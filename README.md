@@ -56,6 +56,7 @@ To generate documentation using `make docs`, you need to install **Texinfo** and
 
 - Short-form vs Long-form message
 - not all clients support long-form message or preview of all hyperlinks (eg. while most support previewing .jpeg not all support .avif
+- some relays don't seem to like 'fast publishing' --> increase delay between posts (see fct `publish_posts`).
 
 ---
 
