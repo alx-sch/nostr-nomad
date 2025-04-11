@@ -6,13 +6,12 @@ NAME :=			nostr-nomad
 
 PYTHON :=		python3
 VENV :=			env
-ACTIVATE :=		. $(VENV)/bin/activate
 
 SRC :=			src
 SRCS :=			$(wildcard $(SRC)/*.py)
 
-# Folder to store exported substack data
-EXPORT :=		export
+# User input folder, incl. config file and export folder (put substack export here)
+USER_INPUT :=	user_input
 
 # Documentation
 DOCS := docs
@@ -35,14 +34,15 @@ YELLOW :=		\033[33m
 ###############
 
 # Default target
-all: run docs
+#all: run docs
+all: run
 
 # Create virtual environment
-$(VENV)/bin/activate: requirements.txt
+$(VENV)/bin/activate: 
 	@echo "$(BOLD)$(YELLOW)Setting up virtual environment...$(RESET)"
 	@$(PYTHON) -m venv $(VENV) 
-	@$(ACTIVATE) && pip install --upgrade pip 
-	@$(ACTIVATE) && pip install -r requirements.txt
+	@$(VENV)/bin/pip install --upgrade pip
+	@$(VENV)/bin/pip install -r requirements.txt
 	@echo "$(BOLD)$(GREEN)Done.$(RESET)"
 
 # Install dependencies
@@ -50,8 +50,8 @@ install: $(VENV)/bin/activate
 
 # Run the main script
 run: $(VENV)/bin/activate $(SRCS)
-	@echo "$(BOLD)$(YELLOW)Running main script...$(RESET)"
-	@$(ACTIVATE) && $(PYTHON) $(SRC)/main.py
+	@echo "$(BOLD)$(YELLOW)Running $(NAME)...$(RESET)"
+	@$(VENV)/bin/python $(SRC)/main.py
 	@echo "$(BOLD)$(GREEN)Done.$(RESET)"
 
 #################
@@ -79,19 +79,32 @@ texinfo: $(TEXINFO)
 	@mv doc.log $(DOCS)/doc.log
 	@echo "$(BOLD)$(GREEN)Done.$(RESET)"
 
+# Check if sphinx-build exists in the virtual environment, if not create the venv and install sphinx
+sphinx_check:
+	@if [ ! -f "$(VENV)/bin/sphinx-build" ]; then \
+		echo "$(BOLD)$(YELLOW)Installing Sphinx in the virtual environment...$(RESET)"; \
+		$(PYTHON) -m venv $(VENV);  \
+		$(VENV)/bin/pip install --upgrade pip; \
+		$(VENV)/bin/pip install sphinx==8.2.3; \
+		echo "$(BOLD)$(GREEN)Sphinx installed successfully.$(RESET)"; \
+	fi
+
 # Generate Sphinx documentation (for Python code)
-sphinx:
+sphinx: sphinx_check
 	@echo "$(BOLD)$(YELLOW)Generating Sphinx documentation...$(RESET)"
 	@mkdir -p $(BUILD_DIR)/sphinx
-	@$(ACTIVATE) && sphinx-build -b html $(DOCS)/sphinx/source $(BUILD_DIR)/sphinx
+	@$(VENV)/bin/sphinx-build -b html $(DOCS)/sphinx/source $(BUILD_DIR)/sphinx
 	@echo "$(BOLD)$(GREEN)Done.$(RESET)"
 
 ##################
 # CLEAN TARGETS  #
 ##################
 
+# Clean up everything, including the cache keeping track of publishing history
+clean-all: clean clean-cache
+
 # Clean everything (environment, docs, cache)
-clean: clean-env clean-docs clean-cache
+clean: clean-env clean-docs clean-temp
 
 # Remove virtual environment
 clean-env:
@@ -103,15 +116,20 @@ clean-env:
 clean-docs:
 	@echo "$(BOLD)$(YELLOW)Cleaning up documentation...$(RESET)"
 	@rm -rf $(BUILD_DIR)
-	@rm -f $(README)
+#	@rm -f $(README)
 	@echo "$(BOLD)$(GREEN)Done.$(RESET)"
 
 # Remove unzipped export data
-clean-cache:
-	@echo "$(BOLD)$(YELLOW)Cleaning up cache...$(RESET)"
+clean-temp:
+	@echo "$(BOLD)$(YELLOW)Cleaning up temporay files...$(RESET)"
 	@rm -rf $(SRC)/__pycache__
 	@rm -f $(DOCS)/doc.aux $(DOCS)/doc.toc $(DOCS)/doc.log
-	@rm -rf $(EXPORT)/unzipped
 	@echo "$(BOLD)$(GREEN)Done.$(RESET)"
 
-.PHONY: all run install clean clean-env clean-docs clean-cache
+# Remove the cache keeping track of publishing history
+clean-cache:
+	@echo "$(BOLD)$(YELLOW)Cleaning up publishing cache...$(RESET)"
+	@rm -f $(USER_INPUT)/cache.json
+	@echo "$(BOLD)$(GREEN)Done.$(RESET)"
+
+.PHONY: all run install clean clean-env clean-docs clean-temp

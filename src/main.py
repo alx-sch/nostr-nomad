@@ -1,13 +1,28 @@
-import sys
-import os
+from utils import define_paths
+from parse_config import parse_config
+from parse_substack import load_post_titles, process_html_files
+from publish_event import publish_posts
+from sys import exit
 
-# Add the 'SRC' directory to sys.path
-sys.path.append(os.path.join(os.path.dirname(__file__), 'SRC'))
+def main():
+    # Get paths
+    path_to_config, path_to_export, path_to_csv, path_to_html_files, cache_file = define_paths()
+    if not path_to_export:
+        exit(1)
 
-import parse
-
-if __name__ == "__main__":
-    path = "export"  # Change this if needed
-    parse.extract_zips(path)
-    print("Main script done.")
+    # Parse config file
+    private_key, public_key, relays = parse_config(path_to_config)
+    if private_key is None or not relays:
+        exit(1)   
+        
+    # Get post titles from CSV
+    titles = load_post_titles(path_to_csv)
     
+    # Get HTML content and add titles
+    posts = process_html_files(path_to_html_files, titles)
+    
+    # Publish posts and manage cache
+    publish_posts(posts, relays, private_key, public_key, cache_file)
+    
+if __name__ == "__main__":
+    main()

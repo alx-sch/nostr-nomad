@@ -136,9 +136,3 @@ Before going public, you can test the `nostr-nomad` tool by publishing to your l
    - Check the feed (house symbol).
 
    If everything is set up correctly, you should now see events published to your local Nostr relay.
-
-   
-   
-
-
-
