@@ -58,6 +58,10 @@ To generate documentation using `make docs`, you need to install **Texinfo** and
 - not all clients support long-form message or preview of all hyperlinks (eg. while most support previewing .jpeg not all support .avif
 - some relays don't seem to like 'fast publishing' --> increase delay between posts (see fct `publish_posts`).
 
+<p align="center">
+    <img src="https://github.com/alx-sch/nostr-nomad/blob/main/.assets/running_nostr-nomad.png" width="600" alt="running_nostr-nomad.png"/>
+</p>
+
 ---
 
 ## Setting up a Local Nostr Relay for Testing
