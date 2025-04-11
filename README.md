@@ -9,7 +9,7 @@ To generate documentation using `make docs`, you need to install **Texinfo** and
 
    - **Ubuntu/Debian**: `sudo apt install texinfo texlive -y`
 
-Additionally, you will need **Python 3** (version 3.7.x or higher).
+Additionally, you will need **Python 3** (version 3.7.x or higher).     
 When you set up the project, the tool will automatically install its dependencies within a virtual environment.
 
 3 Using the tool
