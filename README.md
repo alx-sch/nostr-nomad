@@ -48,6 +48,13 @@ To generate documentation using `make docs`, you need to install **Texinfo** and
 
 --- 
 
+## XXXX TBD
+
+- Short-form vs Long-form message
+- not all clients support long-form message or preview of all hyperlinks (eg. while most support previewing .jpeg not all support .avif
+
+---
+
 ## Setting up a Local Nostr Relay for Testing
 
 Before publishing to public Nostr relays, you might want to test your setup by publishing to a local relay. This allows you to familiarize yourself with how `nostr-nomad` works without impacting the broader network.
