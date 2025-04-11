@@ -1,5 +1,9 @@
 # nostr-nomad
 
+<p align="center">
+    <img src="https://github.com/alx-sch/nostr-nomad/blob/main/.assets/nostr-nomad.png"  alt="nostr-nomad.png" width="500"/>
+</p>
+
 This tool allows users to migrate content from **Substack** to **Nostr**.    
 It’s a collaboration between **[Natalie](https://github.com/busedame)** and **[Alex](https://github.com/alx-sch)**.
 
@@ -117,8 +121,9 @@ Before going public, you can test the `nostr-nomad` tool by publishing to your l
    ```
 
    The relay should begin running, and you’ll see status updates in the terminal. This confirms that the relay is active and listening for WebSocket connections. Leave the terminal window open to keep the relay running. To interact with the relay, use `nostr-nomad` or other testing methods through a separate terminal window.
-   
-   <img src="https://github.com/alx-sch/nostr-nomad/blob/main/.assets/relay_running.png" width="800"/>
+   <p align="center">
+      <img src="https://github.com/alx-sch/nostr-nomad/blob/main/.assets/relay_running.png" width="800" alt="relay_running.png"/>
+   </p>
 
 7. **Checking Messages of the Local Nostr Relay**
 
