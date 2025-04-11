@@ -4,8 +4,8 @@
     <img src="https://github.com/alx-sch/nostr-nomad/blob/main/.assets/nostr-nomad.png"  alt="nostr-nomad.png" width="500"/>
 </p>
 
-This tool allows users to migrate content from **Substack** to **Nostr**.    
-It’s a collaboration between **[Natalie](https://github.com/busedame)** and **[Alex](https://github.com/alx-sch)**.
+This tool allows users to migrate content from **Substack** to **Nostr** relays.    
+`nostr-nomad` is a collaboration between **[Natalie](https://github.com/busedame)** and **[Alex](https://github.com/alx-sch)**.
 
 ## Requirements
 
