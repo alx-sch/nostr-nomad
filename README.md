@@ -52,9 +52,6 @@ To generate documentation using `make docs`, you need to install **Texinfo** and
 
 Before publishing to public Nostr relays, you might want to test your setup by publishing to a local relay. This allows you to familiarize yourself with how `nostr-nomad` works without impacting the broader network.
 
-This [blog post](https://manbytesgnu.org/hello-nostr-with-python.html) by [lash](https://github.com/nolash) is an excellent guide for setting up a local Nostr relay and publishing a message (or event) to it.
-Before going public, you can test the `nostr-nomad` tool by publishing to your local relay.
-
 1. **Install Rust and `cargo`**   
    The first step is to install Rust and Cargo (Rust's package manager/build tool). This is needed to compile and run the `nostr-rs-relay` project.
      
@@ -127,3 +124,9 @@ Before going public, you can test the `nostr-nomad` tool by publishing to your l
    - Check the feed (house symbol).
 
    If everything is set up correctly, you should now see events published to your local Nostr relay.
+
+   ---
+
+   ## Acknowledgements
+
+   We'd like to thank [lash](https://github.com/nolash) for providing the excellent [blog post](https://manbytesgnu.org/hello-nostr-with-python.html), which helped us set up local relays and figure out how to send events to them. Lash has also been a mentor throughout this process.
