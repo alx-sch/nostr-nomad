@@ -139,4 +139,4 @@ Before publishing to public Nostr relays, you might want to test your setup by p
 
    ## Acknowledgements
 
-   We'd like to thank [lash](https://github.com/nolash) for providing the excellent [blog post](https://manbytesgnu.org/hello-nostr-with-python.html), which helped us set up local relays and figure out how to send events to them. Lash has also been a mentor throughout this process.
+   We'd like to thank [lash](https://github.com/nolash) for providing the excellent [blog post](https://manbytesgnu.org/hello-nostr-with-python.html), which helped us set up local relays and figure out how to send events to them. Lash has also been a mentor throughout this project.
