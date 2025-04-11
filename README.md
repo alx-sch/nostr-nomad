@@ -7,6 +7,10 @@
 `nostr-nomad` migrates content from **Substack** to **Nostr** relays.    
 This project is a collaboration between **[Natalie](https://github.com/busedame)** and **[Alex](https://github.com/alx-sch)**.
 
+Supports:
+- Short-form content (event `kind:1`; [NIP-1](https://nostr-nips.com/nip-01)), such as "Tweet"-style messages.
+- **WIP:** Long-form content (event `kind:30023`; [NIP-23](https://nostr-nips.com/nip-23)), such as blog posts.
+
 ---
 
 ## Requirements
@@ -86,14 +90,14 @@ Before publishing to public Nostr relays, you might want to test your setup by p
    git clone https://github.com/scsibug/nostr-rs-relay.git nostr-rs-relay && cd nostr-rs-relay
    ```
 
-3. **Build the Relay Server**
+3. **Build the Relay Server**   
    Compile the project with the `cargo` build tool; this might take some time. 
 
    ```bash
    cargo build --release
    ```
 
-4. **Edit Configuration for the Local Relay**    
+4. **Edit Configuration for the Local Relay**     
    In your `config.toml` file, change the following fields to set up a local Nostr relay:
    ```toml
    [network]
@@ -115,8 +119,7 @@ Before publishing to public Nostr relays, you might want to test your setup by p
       <img src="https://github.com/alx-sch/nostr-nomad/blob/main/.assets/relay_running.png" width="800" alt="relay_running.png"/>
    </p>
 
-7. **Checking Messages of the Local Nostr Relay**
-
+7. **Checking Messages of the Local Nostr Relay**    
    You can use any Nostr client that allows for the inclusion of local relays. For example:
    - [Gossip](https://github.com/mikedilger/gossip)
    - [iris](https://github.com/irislib/iris-messenger)
