@@ -50,6 +50,8 @@ To generate documentation using `make docs`, you need to install **Texinfo** and
 
 ## Setting up a Local Nostr Relay for Testing
 
+Before publishing to public Nostr relays, you might want to test your setup by publishing to a local relay. This allows you to familiarize yourself with how `nostr-nomad` works without impacting the broader network.
+
 This [blog post](https://manbytesgnu.org/hello-nostr-with-python.html) by [lash](https://github.com/nolash) is an excellent guide for setting up a local Nostr relay and publishing a message (or event) to it.
 Before going public, you can test the `nostr-nomad` tool by publishing to your local relay.
 
