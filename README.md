@@ -67,6 +67,7 @@ To generate documentation using `make docs`, you need to install **Texinfo** and
 ## Setting up a Local Nostr Relay for Testing
 
 Before publishing to public Nostr relays, you might want to test your setup by publishing to a local relay. This allows you to familiarize yourself with how `nostr-nomad` works without impacting the broader network.
+Below is a setup guide for `nostr-rs-relay`, but any other compatible relay should work as well.
 
 1. **Install Rust and `cargo`**   
    The first step is to install Rust and Cargo (Rust's package manager/build tool). This is needed to compile and run the `nostr-rs-relay` project.
@@ -87,6 +88,18 @@ Before publishing to public Nostr relays, you might want to test your setup by p
    rustc --version
    cargo --version
    ```
+
+2. **Install the Protocol Buffers Compiler**     
+    The build process for `nostr-rs-relay` requires the Protocol Buffers compiler (`protoc`). You can install it on Ubuntu with:
+   
+   ```bash
+   sudo apt install protobuf-compiler
+   ```
+   
+   After installation, confirm that it's available by checking the version:
+    ```bash
+   protoc --version
+   ```
    
 2. **Clone the `nostr-rs-relay` Repository**    
    Now, you’ll clone the `nostr-rs-relay` repository to your local machine. This repository contains the source code for the relay server.
@@ -95,14 +108,14 @@ Before publishing to public Nostr relays, you might want to test your setup by p
    git clone https://github.com/scsibug/nostr-rs-relay.git nostr-rs-relay && cd nostr-rs-relay
    ```
 
-3. **Build the Relay Server**   
+4. **Build the Relay Server**   
    Compile the project with the `cargo` build tool; this might take some time. 
 
    ```bash
    cargo build --release
    ```
 
-4. **Edit Configuration for the Local Relay**     
+5. **Edit Configuration for the Local Relay**     
    In your `config.toml` file, change the following fields to set up a local Nostr relay:
    ```toml
    [network]
