@@ -1,5 +1,5 @@
 # Config parsing:
-tomli==2.2.1
+confini==0.6.5
 
 # HTML parsing:
 beautifulsoup4==4.13.3

@@ -1,7 +1,9 @@
+# external imports
 from coincurve import PrivateKey
 from bech32 import convertbits, bech32_decode, bech32_encode
 
-def process_private_key(priv_key: str):
+
+def get_keys(priv_key: str):
     """ Process private key in either hex or nsec format.
     Parameters:
         priv_key (str): The private key in hex or nsec format.
@@ -25,7 +27,8 @@ def process_private_key(priv_key: str):
     pub_key_hex = priv_key_object.public_key_xonly.format().hex()
     return priv_key_object, pub_key_hex
     
-def generate_random_private_key():
+    
+def generate_keys():
     """ Generate a random private key.
     Returns:
         tuple: A tuple containing the PrivateKey object and the public key in hex format.
@@ -33,6 +36,7 @@ def generate_random_private_key():
     priv_key_object = PrivateKey()
     pub_key_hex = priv_key_object.public_key_xonly.format().hex()
     return priv_key_object, pub_key_hex
+
 
 def encode_npub(pubkey_hex: str):
     """ Encodes a public key in hex format into npub format."""

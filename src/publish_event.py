@@ -1,7 +1,7 @@
 from utils import print_green, print_red, print_yellow, load_cache, save_cache
 from build_event import build_event
 from json import loads
-from process_keys import encode_npub
+from keys import encode_npub
 from time import sleep
 import websocket
 
