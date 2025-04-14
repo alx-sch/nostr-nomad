@@ -1,5 +1,4 @@
-from os.path import exists
-from tomli import load
+import configparser
 from utils import print_error
 from process_keys import process_private_key, generate_random_private_key
 

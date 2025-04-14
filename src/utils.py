@@ -1,6 +1,7 @@
 import sys
 import os
 from json import load, dump
+from dataclasses import dataclass
 
 def print_error(message: str):
     """ Prints an error message in red to stderr."""
@@ -26,20 +27,14 @@ def print_yellow(message: str):
     reset = '\033[0m'
     print(f"{yellow}{message}{reset}")
 
-def check_export_folder(folder_path: str):
-    """ Check if there is exactly one valid export folder."""
-    # Check if the export folder exists
-    if not os.path.exists(folder_path):
-        print_error(f"Error: The export folder '{folder_path}' does not exist.")
-        return False
-    
-    # List all directories in the export folder
+def check_export_folder(folder_path: str) -> str:
+    """ Checks if the substack export data exists and is valid."""
+    # List subfolders in 'folder_path'
     subfolders = [f for f in os.listdir(folder_path) if os.path.isdir(os.path.join(folder_path, f))]
 
     # Check if there is exactly one folder
     if len(subfolders) != 1:
-        print_error(f"Error: Expected substack export in '{folder_path}<substack_export>/' (unzipped); found {len(subfolders)}.")
-        return False
+        raise ValueError(f"Expected one substack export folder in '{folder_path}<substack_export>/' (unzipped); found {len(subfolders)}.")
     
     # Get the path to the subfolder
     export_folder = os.path.join(folder_path, subfolders[0])
@@ -47,14 +42,13 @@ def check_export_folder(folder_path: str):
     # Check if the 'posts' folder exists inside the subfolder
     posts_folder = os.path.join(export_folder, "posts")
     if not os.path.isdir(posts_folder):
-        print_error(f"Error: 'posts' folder not found inside the substack export.")
-        return False
+        raise FileNotFoundError(f"'posts' folder not found inside the substack export.")
+
 
     # Check if the 'posts.csv' file exists inside the 'posts' folder
     posts_csv = os.path.join(export_folder, "posts.csv")
     if not os.path.isfile(posts_csv):
-        print_error(f"Error: 'posts.csv' file not found inside the substack export.")
-        return False
+        raise FileNotFoundError(f"'posts.csv' file not found inside the substack export.")
 
     return export_folder 
 
