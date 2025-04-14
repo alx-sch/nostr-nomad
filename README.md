@@ -119,8 +119,8 @@ Below is a setup guide for `nostr-rs-relay`, but any other compatible relay shou
    In your `config.toml` file, change the following fields to set up a local Nostr relay:
    ```toml
    [network]
-   address = "127.0.0.1"    # Or any other appropriate loopback IP, 127.0.0.1 is usually used as localhost.
-   port = 8081              # Use any available port; 8081 is commonly used for development/testing.
+   address = "127.0.0.1"  # Or any other appropriate loopback IP, 127.0.0.1 is usually used as localhost.
+   port = 8081            # Use any available port; 8081 is commonly used for development/testing.
    ```
 
    Since this is for local testing, we will not enable WSS (secure WebSocket). This avoids the need to generate SSL/TLS certificates or configure encryption — keeping the setup simple and focused. The relay will run at: `ws://127.0.0.1:8081` or simply `ws://localhost:8081` (confirm that `localhost` points to `127.0.0.1` by running `ping localhost`).
