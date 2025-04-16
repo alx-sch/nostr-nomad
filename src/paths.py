@@ -4,7 +4,7 @@ from dataclasses import dataclass
 
 
 def get_export_folder(folder_path: str):
-    """ Returns the path to a valid Substack export folder, or throw errors if invalid."""
+    """ Returns the path to a valid Substack export folder."""
     export_folder = os.path.join(folder_path, "export")
     subfolders = [f for f in os.listdir(export_folder) if os.path.isdir(os.path.join(export_folder, f))]
 

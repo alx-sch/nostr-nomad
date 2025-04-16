@@ -11,9 +11,6 @@ coincurve==21.0.0
 # Relay communication:
 websocket-client==1.8.0
 
-# Config parsing:
-tomli==2.2.1
-
 # Not used in current implementation:
 #ecdsa==0.19.1
 #certifi==2025.1.31

@@ -1,5 +1,9 @@
 .DS_Store
 
+# relay
+nostr-relay/
+nostr-rs-relay/
+
 # Python virtual environment
 env/
 

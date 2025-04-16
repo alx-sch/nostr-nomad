@@ -1,6 +1,7 @@
 # standard imports
 import json
-
+import os
+    
     
 def print_green(message: str):
     """ Prints a message in green."""
@@ -18,19 +19,21 @@ def print_red(message: str):
     
 def print_yellow(message: str):
     """ Prints a message in yellow."""
-    yellow = '\033[33m'
+    yellow = '\033[1m\033[33m'
     reset = '\033[0m'
     print(f"{yellow}{message}{reset}")
 
 
 def load_cache(path: str):
     """ Load cache from a JSON file."""
-    with open(path, "r", encoding="utf-8") as f:
-        return json.load(f)
+    if os.path.exists(path):
+        with open(path, 'r', encoding = 'utf-8') as f:
+            return json.load(f)
+    return {} # If cache doesn't exist, return empty dict
 
 
 def save_cache(path: str, data: dict):
     """ Save cache to a JSON file."""
-    with open(path, "w", encoding="utf-8") as f:
-        json.dump(data, f, indent=2)
+    with open(path, 'w', encoding = 'utf-8') as f:
+        json.dump(data, f)
         
