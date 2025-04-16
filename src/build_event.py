@@ -1,21 +1,28 @@
-from time import time
-from json import dumps
+# standard imports
 from hashlib import sha256
+from json import dumps
+from time import time
 
-def build_message(content: str, pub_key: str, kind: int, tags):
-    """ Build a Nostr message with the given content, public key, kind, and tags.
+# local imports
+from nostr_config import NostrConfig
+
+
+def build_unsigned_event(content: str, pub_key: str, kind: int, tags):
+    """ Creates an unsigned Nostr event as a list, ready for hashing/signing.
+
     Parameters:
-        content (str): The content of the message to be sent.
-        pub_key (str): The public key of the sender (hex format).
-        kind (int): The kind of event.
-        tags (list): List of tags for the event.
+        content (str): The event content.
+        pub_key (str): Hex-encoded public key of the author.
+        kind (int): Nostr event kind (e.g., 1 for text notes).
+        tags (List, optional): List of tags associated with the event.
+
     Returns:
-        list: The message data in a list format.
+        List: The event in unsigned list format [0, pubkey, created_at, kind, tags, content].
     """
     if tags is None:
         tags = []
     t = int(time())
-    msg = [
+    event = [
         0,          
         pub_key,    # Public key
         t,          # Timestamp
@@ -23,41 +30,47 @@ def build_message(content: str, pub_key: str, kind: int, tags):
         tags,       # Tags 
         content,    # Content of the message
     ]
-    return msg
+    return event
 
-def build_event(message: str, priv_key, pub_key: str, kind: int=1, tags=None):
-    """ Builds and signs an event message for publishing to Nostr relays.
+
+def build_signed_event(message: str, nostr: NostrConfig, kind: int = 1, tags = None):
+    """ Creates and signs a Nostr event using Schnorr signature.
+
     Parameters:
-        message (str): The content of the message to be sent.
-        priv_key (PrivateKey obj): Private key object file.
-        priv_key (str): Public key (in hex format).
-        kind (int): The kind of event (default is 1 for text note).
-        tags (list): Optional list of tags for the event.
+        content (str): The message content.
+        priv_key: Private key object.
+        pub_key (str): Hex-encoded public key.
+        kind (int): Nostr event kind (default is 1 for text notes).
+        tags (List, optional): Tags list.
+
     Returns:
-        str: The event in JSON format ready for publishing.
+        str: JSON-encoded signed Nostr event.
     """
-    # Create the unsigned message data
-    msg = build_message(message, pub_key, kind, tags)
-    msg_json = dumps(msg, ensure_ascii=False, separators=(',', ':'))
+    # Create the unsigned event data
+    event = build_unsigned_event(message, nostr.public_key, kind, tags)
+    event_json = dumps(event, ensure_ascii = False, separators = (',', ':'))
     
     # Calculate the signature over the digest of the unsigned message
     hash = sha256()
-    hash.update(msg_json.encode("utf-8"))
-    msg_hash = hash.digest()
-    sig = priv_key.sign_schnorr(msg_hash)
+    hash.update(event_json.encode("utf-8"))
+    event_hash = hash.digest()
+    sig = nostr.private_key.sign_schnorr(event_hash)
     
     # Assemble and output the message to be published, adding the digest and the signature
-    payload = {
-        "id": msg_hash.hex(),
-        "pubkey": msg[1],
-        "created_at": msg[2],
-        "kind": msg[3],
-        "tags": msg[4],
-        "content": msg[5],
-        "sig": sig.hex(),
+    event_signed = {
+        "id": event_hash.hex(),  # SHA-256 hash of the serialized event content 
+        "pubkey": event[1],
+        "created_at": event[2],
+        "kind": event[3],
+        "tags": event[4],
+        "content": event[5],
+        "sig": sig.hex(),  # Schnorr signature of the event hash
     }
-    event = [
+    
+    # Relay expects the event to be in a list format
+    event_packet = [
         "EVENT",  
-        payload,  
+        event_signed,  
     ]
-    return dumps(event, ensure_ascii=False)
+    
+    return dumps(event_packet, ensure_ascii = False)

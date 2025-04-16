@@ -1,11 +1,17 @@
-from utils import print_green, print_red, print_yellow, load_cache, save_cache
-from build_event import build_event
-from json import loads
-from process_keys import encode_npub
+
+from build_event import build_signed_event
+import json
 from time import sleep
+
+# external imports
 import websocket
 
-def publish_event(event_json: str, post_id: str, relay_url: str):
+# local imports
+import utils
+from nostr_config import NostrConfig
+
+
+def publish_event(event_json: str, relay: str, padding: int = 0):
     """ Publish an event to a Nostr relay.
     Parameters:
         event_json (str): The event in JSON format to be sent.
@@ -14,28 +20,42 @@ def publish_event(event_json: str, post_id: str, relay_url: str):
     Returns:
         bool: 'True' if the event was successfully sent, 'False' otherwise.
     """
-    print(f"Sending post '{post_id}' to '{relay_url}': ", end="") 
-    
     try:
-        ws = websocket.create_connection(relay_url) # Create a WebSocket connection
-        ws.send(event_json) # Send the event JSON to the relay
-        response = ws.recv() # Wait for a response from the relay
-        response_data = loads(response) # Parse the response data
+        print(f"  - to {relay.ljust(padding)} ... ", end="")
         
-        if response_data[0] == "OK": 
-            print_green(response_data[0])
-            ws.close()
-            return True
-        else:
-            print_red(response_data[0])
-            ws.close()
+        try:
+            ws = websocket.create_connection(relay)
+        except websocket.WebSocketException as e:  # Handle any WebSocket-related errors
+            utils.print_red(f"WebSocket Error: {e}")
             return False
         
+        try:
+            ws.send(event_json)
+            response = ws.recv()
+            response_data = json.loads(response)
+
+            if response_data[0] == "OK":
+                utils.print_green(response_data[0])
+                ws.close()
+                return True
+            else:
+                utils.print_red(response_data[0])
+                ws.close()
+                return False
+        except json.JSONDecodeError as e:  # Handle JSON parsing error
+            utils.print_red(f"Error parsing: {e}")
+            ws.close()
+            return False
+        except Exception as e:    # Catch all other unexpected errors
+            utils.print_red(f"Error: {e}")
+            ws.close()
+            return False
     except Exception as e:
-        print_red(f"{e}")
+        utils.print_red(f"Error: {e}")
         return False
     
-def publish_posts(posts, relays, private_key, public_key, cache_file, delay: int=1):
+    
+def publish_posts(posts, nostr: NostrConfig, cache_file, delay: int=1):
     """ Publish posts to the given relays, checking for duplicates in the cache.
     Parameters:
         posts (dict): Dictionary of posts to be published.
@@ -45,30 +65,34 @@ def publish_posts(posts, relays, private_key, public_key, cache_file, delay: int
         cache_file (str): Path to the cache file for storing published posts.
         delay (int): Delay between publishing each post (default is 1 second).
     """
-    # Print the npub key
-    npub_key = encode_npub(public_key)
-    print(f"Publishing as '{npub_key}'")
+    bold = '\033[1m'
+    reset = '\033[0m'
+    padding = len(max(nostr.relays, key = len))
+    print(f"\nPublishing as '{bold}{nostr.npub_key}{reset}'\n")
     
     # Load cache from file (or create an empty cache if it doesn't exist)
-    published = load_cache(cache_file)
+    published = utils.load_cache(cache_file)
     
     # Iterate through posts and publish them
     for post_id, content in posts.items():
         relays_published = published.get(post_id, [])  # Get list of relays post is already published to
-        event = build_event(content, private_key, public_key)
+        event = build_signed_event(content, nostr)
+        
+        print(f"Sending post '{post_id}'...")
         
         # Publish to relays
-        for relay in relays:
+        for relay in nostr.relays:
             if relay in relays_published:
-                print_yellow(f"Post '{post_id}' already published to '{relay}'.")
+                print(f"  - to {relay.ljust(padding)} ... ", end="")
+                utils.print_yellow(f"Already published. Skipping this relay.")
                 continue
-            if publish_event(event, post_id, relay):
+            
+            if publish_event(event, relay, padding):
                 relays_published.append(relay)  # Add relay to the list of relays post is published to
-        
+                
+        print('')
         published[post_id] = relays_published  # Update cache
-        
-        # Add delay between publishing posts
-        sleep(delay)
+        utils.save_cache(cache_file, published)   # Save the updated cache
+        sleep(delay)  # Add delay between publishing posts
 
-    # Save the updated cache
-    save_cache(cache_file, published)
+    
