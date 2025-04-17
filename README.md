@@ -28,7 +28,7 @@ To generate documentation using `make docs`, you need to install **Texinfo** and
 ## How to Use
 
 1. **Clone the Repository**   
-   First, clone the repository and navigate into the project directory:  
+   Clone the repository and navigate into the project directory:  
    ```
    git clone https://github.com/alx-sch/nostr-nomad nostr-nomad && nostr-nomad
    ```
@@ -40,7 +40,7 @@ To generate documentation using `make docs`, you need to install **Texinfo** and
 3. **Provide Key and Relays**   
  - Add your private key (in hex or nsec format) and the relays you'd like to publish to in the `config.toml` file in `user_input/`.
  - The private key is used **only** to sign Nostr events and is **never shared**.
- - If you prefer, you can leave the private key empty (`""`) to generate a random key at runtime.
+ - If you prefer, you can set the private key to `x` to generate a random key at runtime.
  - ⚠️ Note: Some relays may require prior authorization and might reject events from unknown keys.
       
 4. **Run `nostr-nomad`**   
