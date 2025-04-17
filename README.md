@@ -40,7 +40,7 @@ To generate documentation using `make docs`, you need to install **Texinfo** and
 3. **Provide Key and Relays**   
  - Add your private key (in hex or nsec format) and the relays you'd like to publish to in the `config.toml` file in `user_input/`.
  - The private key is used **only** to sign Nostr events and is **never shared**.
- - If you prefer, you can set the private key to `x` to generate a random key at runtime.
+ - To generate a random key at runtime, simply set the private key to `x`.
  - ⚠️ Note: Some relays may require prior authorization and might reject events from unknown keys.
       
 4. **Run `nostr-nomad`**   
