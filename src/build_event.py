@@ -38,8 +38,7 @@ def build_signed_event(message: str, nostr: NostrConfig, kind: int = 1, tags = N
 
     Parameters:
         content (str): The message content.
-        priv_key: Private key object.
-        pub_key (str): Hex-encoded public key.
+        nostr (NostrConfig): Nostr configuration object containing private and public keys.
         kind (int): Nostr event kind (default is 1 for text notes).
         tags (List, optional): Tags list.
 
