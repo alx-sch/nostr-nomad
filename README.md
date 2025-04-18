@@ -18,7 +18,7 @@ Supports:
 You'll need **Python 3** (version 3.7 or higher) to run the project.  
 All Python dependencies will be automatically installed in a virtual environment called `env`. 
 
-To generate documentation using `make docs`, you need to install **Texinfo** and **TeX** first:
+To generate documentation using `make docs`, please install **Texinfo** and **TeX** first:
 
    - **Ubuntu/Debian**: `sudo apt install texinfo texlive -y`
    - **macOS**: `brew install texinfo texlive`
