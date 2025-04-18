@@ -15,8 +15,8 @@ Supports:
 
 ## Requirements
 
-You need **Python 3** (version 3.7.x or higher) to compile the project.  
-All Python dependencies will be automatically installed within the isolated virtual environment `env`. 
+You'll need **Python 3** (version 3.7 or higher) to run the project.  
+All Python dependencies will be automatically installed in a virtual environment called `env`. 
 
 To generate documentation using `make docs`, you need to install **Texinfo** and **TeX** first:
 
