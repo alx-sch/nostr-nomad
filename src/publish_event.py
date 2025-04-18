@@ -12,49 +12,61 @@ from nostr_config import NostrConfig
 
 
 def publish_event(event_json: str, relay: str, padding: int = 0):
-    """ Publish an event to a Nostr relay.
+    """
+    Publish an event to a Nostr relay.
+
     Parameters:
         event_json (str): The event in JSON format to be sent.
-        post_id (str): The ID of the post being published.
-        relay_url (str): The URL of the Nostr relay to which the event will be sent.
-    Returns:
-        bool: 'True' if the event was successfully sent, 'False' otherwise.
-    """
-    try:
-        print(f"  - to {relay.ljust(padding)} ... ", end="")
-        
-        try:
-            ws = websocket.create_connection(relay)
-        except websocket.WebSocketException as e:  # Handle any WebSocket-related errors
-            utils.print_red(f"WebSocket Error: {e}")
-            return False
-        
-        try:
-            ws.send(event_json)
-            response = ws.recv()
-            response_data = json.loads(response)
+        relay (str): The URL of the Nostr relay to which the event will be sent.
+        padding (int): Amount of padding for formatting output.
 
-            if response_data[0] == "OK":
-                utils.print_green(response_data[0])
-                ws.close()
-                return True
-            else:
-                utils.print_red(response_data[0])
-                ws.close()
-                return False
-        except json.JSONDecodeError as e:  # Handle JSON parsing error
-            utils.print_red(f"Error parsing: {e}")
+    Returns:
+        bool: True if the event was successfully sent, False otherwise.
+    """
+    print(f"  - to {relay.ljust(padding)} ... ", end="")
+        
+    try:
+        ws = websocket.create_connection(relay)
+    except Exception as e: 
+        utils.print_red(f"{e}")
+        return False
+        
+    try:
+        ws.send(event_json)
+    except Exception as e:
+        utils.print_red(f"WebSocket send error: {e}")
+        ws.close()
+        return False
+        
+    try:
+        response = ws.recv()
+    except Exception as e:
+        utils.print_red(f"WebSocket receive error: {e}")
+        ws.close()
+        return False
+        
+    try:
+        response_data = json.loads(response)
+    except Exception as e:
+        utils.print_red(f"Error decoding JSON response: {e}")
+        ws.close()
+        return False
+        
+    try:
+        if response_data[0] == "OK":
+            utils.print_green(response_data[0])
             ws.close()
-            return False
-        except Exception as e:    # Catch all other unexpected errors
-            utils.print_red(f"Error: {e}")
+            return True
+        else:
+            utils.print_red(response_data[0])
             ws.close()
             return False
     except Exception as e:
-        utils.print_red(f"Error: {e}")
+        utils.print_red(f"Response structure error: {e}")
+        ws.close()
         return False
-    
-    
+
+
 def publish_posts(posts, nostr: NostrConfig, cache_file, delay: int=1):
     """ Publish posts to the given relays, checking for duplicates in the cache.
     Parameters:

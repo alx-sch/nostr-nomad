@@ -1,6 +1,10 @@
 # standard imports
 import os
 from dataclasses import dataclass
+from sys import exit
+
+# local imports
+from utils import print_red
 
 
 def get_export_folder(folder_path: str):
@@ -9,7 +13,8 @@ def get_export_folder(folder_path: str):
     subfolders = [f for f in os.listdir(export_folder) if os.path.isdir(os.path.join(export_folder, f))]
 
     if len(subfolders) != 1:
-        raise ValueError(f"Expected one substack export folder in '{folder_path}<substack_export>/' (unzipped); found {len(subfolders)}.")
+        print_red(f"Error: Expected one substack export folder here: '{export_folder}/<substack_export>' (unzipped); found {len(subfolders)}.")
+        exit(1)
     
     substack_folder = os.path.join(export_folder, subfolders[0])
 
