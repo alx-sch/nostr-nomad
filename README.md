@@ -69,14 +69,14 @@ To generate documentation using `make docs`, please install **Texinfo** and **Te
 Before publishing to public Nostr relays, consider testing your setup with a local relay. This lets you explore how `nostr-nomad` works without impacting the broader network.
 Below is a setup guide for `nostr-rs-relay`, but any other compatible relay should work, too.
 
-1. **Install Rust and `cargo`**   
-   The first step is to install Rust and Cargo (Rust's package manager/build tool). This is needed to compile and run the `nostr-rs-relay` project.
+1. **Install Rust**   
+   The first step is to install Rust. This is needed to compile and run the `nostr-rs-relay` project.
      
    ```bash
    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
    ```
 
-   To make sure the `cargo` tool and `rustc` are available in your terminal, run:
+   To make `rustc` and its package manager `cargo` available in your terminal, run:
 
     ```bash
    source $HOME/.cargo/env
