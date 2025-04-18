@@ -38,7 +38,7 @@ To generate documentation using `make docs`, please install **Texinfo** and **Te
  - Place the unzipped export folder into `user_input/export/`. It should contain a `posts.csv` file and a `posts/` directory with your `.html` files.
    
 3. **Provide Key and Relays**   
- - Add your private key (in hex or nsec format) and the relays you'd like to publish to in the `config.toml` file in `user_input/`.
+ - Add your private key (in hex or nsec format) and the relays you'd like to publish to in the `config.ini` file in `user_input/`.
  - The private key is used **only** to sign Nostr events and is **never shared**.
  - To generate a random key at runtime, simply set the private key to `x`.
  - ⚠️ Note: Some relays may require prior authorization and might reject events from unknown keys.
