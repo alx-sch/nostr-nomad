@@ -28,13 +28,13 @@ def parse_config(path_to_config: str):
     try:
         private_key = config.get('USER_PRIVATE_KEY')
     except KeyError:
-        print_red(f"Error: Missing private key. Please provide in '{path_to_config}/config.ini'.")
+        print_red(f"Error: Missing 'private_key'. Please provide in '{path_to_config}/config.ini'.")
         exit(1)
     
     try:
         relays_str = config.get('NOSTR_RELAYS')
     except KeyError:
-        print_red(f"Error: Missing relay URLs. Please provide in '{path_to_config}/config.ini'.")
+        print_red(f"Error: Missing 'relays'. Please provide in '{path_to_config}/config.ini'.")
         exit(1)
     
     # Convert relay string to list
