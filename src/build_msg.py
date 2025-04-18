@@ -53,3 +53,5 @@ class PlaintextBuilder:
         if title:
             message = f"[{title}]\n{message}"
         return message
+
+## ADD BUILDER FOR MARDOWN MSGS ##
