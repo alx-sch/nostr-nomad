@@ -66,8 +66,8 @@ To generate documentation using `make docs`, please install **Texinfo** and **Te
 
 ## Setting up a Local Nostr Relay for Testing
 
-Before publishing to public Nostr relays, you might want to test your setup by publishing to a local relay. This allows you to familiarize yourself with how `nostr-nomad` works without impacting the broader network.
-Below is a setup guide for `nostr-rs-relay`, but any other compatible relay should work as well.
+Before publishing to public Nostr relays, consider testing your setup with a local relay. This lets you explore how `nostr-nomad` works without impacting the broader network.
+Below is a setup guide for `nostr-rs-relay`, but any other compatible relay should work, too.
 
 1. **Install Rust and `cargo`**   
    The first step is to install Rust and Cargo (Rust's package manager/build tool). This is needed to compile and run the `nostr-rs-relay` project.
