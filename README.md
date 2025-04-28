@@ -126,7 +126,7 @@ Below is a setup guide for `nostr-rs-relay`, but any other compatible relay shou
    Since this is for local testing, we will not enable WSS (secure WebSocket). This avoids the need to generate SSL/TLS certificates or configure encryption — keeping the setup simple and focused. The relay will run at: `ws://127.0.0.1:8081` or simply `ws://localhost:8081` (confirm that `localhost` points to `127.0.0.1` by running `ping localhost`).
 
 6. **Starting the Nostr Relay**    
-   Before running the relay, you need to create the database directory first (`mkdir db`) in the root of the nostr-rs-relay repository. The relay will store data such as events and connections here.    
+   Before running the relay, you need to create the database directory first (`mkdir db`) in the root of the `nostr-rs-relay` repository. The relay will store data such as events and connections here.    
    Once the database directory is created, you can start the relay by running the following command. This will provide detailed log output:
     ```bash
    RUST_LOG=debug ./target/release/nostr-rs-relay -c config.toml -d db
