@@ -34,7 +34,7 @@ To generate documentation using `make docs`, please install **Texinfo** and **Te
    ```
 2. **Provide Substack Export**   
  - Export your Substack data (check [here](https://support.substack.com/hc/en-us/articles/360037466012-How-do-I-export-my-posts)).
- - Optional: Unzip the archive and remove any posts you don’t want to migrate by deleting the corresponding `.html` files in the `posts/` folder (remember to also remove them from the 'posts.csv'-file, as the parser is quite strict).
+ - Optional: Unzip the archive and remove any posts you don’t want to migrate by deleting the corresponding `.html` files in the `posts/` folder (remember to also remove them from the `posts.csv`-file, as the parser is quite strict).
  - Place the export zip file or directory into `user_entries/export/`. It should contain a `posts.csv` file and a `posts/` directory with your `.html` files.
    
 3. **Provide Key and Relays**   
