@@ -9,7 +9,7 @@ This project is a collaboration between **[Natalie](https://github.com/busedame)
 
 Supports:
 - Short-form content (event `kind:1`; [NIP-1](https://nostr-nips.com/nip-01)) — such as "Tweet"-style messages (no formatting).
-- **WIP:** Long-form content (event `kind:30023`; [NIP-23](https://nostr-nips.com/nip-23)) — such as blog posts (with Markdown formatting).
+- Long-form content (event `kind:30023`; [NIP-23](https://nostr-nips.com/nip-23)) — such as blog posts (with Markdown formatting).
 
 ---
 
@@ -34,11 +34,11 @@ To generate documentation using `make docs`, please install **Texinfo** and **Te
    ```
 2. **Provide Substack Export**   
  - Export your Substack data (check [here](https://support.substack.com/hc/en-us/articles/360037466012-How-do-I-export-my-posts)).
- - Unzip the archive and remove any posts you don’t want to migrate by deleting the corresponding `.html` files in the `posts/` folder.
- - Place the unzipped export folder into `user_input/export/`. It should contain a `posts.csv` file and a `posts/` directory with your `.html` files.
+ - Optional: Unzip the archive and remove any posts you don’t want to migrate by deleting the corresponding `.html` files in the `posts/` folder.
+ - Place the export zip file or directory into `user_entries/export/`. It should contain a `posts.csv` file and a `posts/` directory with your `.html` files.
    
 3. **Provide Key and Relays**   
- - Add your private key (in hex or nsec format) and the relays you'd like to publish to in the `config.ini` file in `user_input/`.
+ - Add your private key (in hex or nsec format) and the relays you'd like to publish to in the `config.ini` file in `user_entries/`.
  - The private key is used **only** to sign Nostr events and is **never shared**.
  - To generate a random key at runtime, simply set the private key to `x`.
  - ⚠️ Note: Some relays may require prior authorization and might reject events from unknown keys.
@@ -46,7 +46,7 @@ To generate documentation using `make docs`, please install **Texinfo** and **Te
 4. **Run `nostr-nomad`**   
    Once everything is set up, you can run the following commands:
 - `make` to build and execute the tool.
-- `make docs` to generate the documentation for the project.
+- `make docs` to generate the documentation for the project (WIP).
 - `make clean` to remove compiled files, the virtual environment, and documentation.
 - `make clean-all` to also remove the cache (in `user_input/`). Please note that previously published posts are tracked in the cache, preventing duplicates from being sent to the same relay.
 
