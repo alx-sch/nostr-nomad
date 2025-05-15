@@ -10,8 +10,11 @@ VENV :=			env
 SRC :=			src
 SRCS :=			$(wildcard $(SRC)/*.py)
 
-# User input folder, incl. config file and export folder (put substack export here)
-USER_INPUT :=	user_input
+# Hidden folder to store caches
+CACHES :=	.caches
+
+# User input folder, export folder (put substack export here)
+EXPORT_DIR := user_entries/export
 
 # Documentation
 DOCS := docs
@@ -34,7 +37,7 @@ YELLOW :=		\033[33m
 ###############
 
 # Default target
-#all: run docs
+# all: run docs
 all: run
 
 # Create virtual environment
@@ -51,8 +54,10 @@ install: $(VENV)/bin/activate
 # Run the main script
 run: $(VENV)/bin/activate $(SRCS)
 	@echo "$(BOLD)$(YELLOW)Running $(NAME)...$(RESET)"
+	@rm -f $(EXPORT_DIR)/.gitkeep
 	@$(VENV)/bin/python $(SRC)/main.py
 	@echo "$(BOLD)$(GREEN)Done.$(RESET)"
+	@touch $(EXPORT_DIR)/.gitkeep
 
 #################
 # DOCUMENTATION #
@@ -129,7 +134,8 @@ clean-temp:
 # Remove the cache keeping track of publishing history
 clean-cache:
 	@echo "$(BOLD)$(YELLOW)Cleaning up publishing cache...$(RESET)"
-	@rm -f $(USER_INPUT)/cache.json
+	@rm -f $(CACHES)/assets/*
+	@rm -f $(CACHES)/posts/caches.json
 	@echo "$(BOLD)$(GREEN)Done.$(RESET)"
 
 .PHONY: all run install clean clean-env clean-docs clean-temp

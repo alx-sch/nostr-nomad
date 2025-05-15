@@ -1,6 +1,5 @@
 # standard imports
 import json
-from build_event import build_signed_event
 from time import sleep
 
 # external imports
@@ -8,7 +7,8 @@ import websocket
 
 # local imports
 import utils
-from nostr_config import NostrConfig
+from models import Posts, Usr
+from event_build import build_signed_event
 
 
 def publish_event(event_json: str, relay: str, padding: int = 0):
@@ -64,9 +64,9 @@ def publish_event(event_json: str, relay: str, padding: int = 0):
         return False
     finally:
         ws.close()
-
-
-def publish_posts(posts, nostr: NostrConfig, cache_file, delay: int=1):
+    
+    
+def publish_posts(posts: list[Posts], usr: Usr, delay: int=1):
     """ Publish posts to the given relays, checking for duplicates in the cache.
     
     Parameters:
@@ -77,21 +77,21 @@ def publish_posts(posts, nostr: NostrConfig, cache_file, delay: int=1):
     """
     bold = '\033[1m'
     reset = '\033[0m'
-    padding = len(max(nostr.relays, key = len))
-    print(f"\nPublishing as '{bold}{nostr.npub_key}{reset}'\n")
+    padding = len(max(usr.relays, key = len))
+    print(f"\nPublishing as '{bold}{usr.npub_key}{reset}'\n")
     
     # Load cache from file (or create an empty cache if it doesn't exist)
-    published = utils.load_cache(cache_file)
+    published = utils.load_cache(usr.caches_posts)
     
     # Iterate through posts and publish them
-    for post_id, content in posts.items():
-        relays_published = published.get(post_id, [])  # Get list of relays post is already published to
-        event = build_signed_event(content, nostr)
+    for post in posts:
+        relays_published = published.get(post.d_tag, [])  # Get list of relays post is already published to
+        event = build_signed_event(post.content, usr.priv_key, usr.pub_key, post.tags, post.kind)
         
-        print(f"Sending post '{post_id}'...")
+        print(f"Sending post '{post.d_tag}'...")
         
         # Publish to relays
-        for relay in nostr.relays:
+        for relay in usr.relays:
             if relay in relays_published:
                 print(f"  - to {relay.ljust(padding)} ... ", end="")
                 utils.print_yellow(f"Already published. Skipping this relay.")
@@ -99,9 +99,9 @@ def publish_posts(posts, nostr: NostrConfig, cache_file, delay: int=1):
             
             if publish_event(event, relay, padding):
                 relays_published.append(relay)  # Add relay to the list of relays post is published to
+                utils.store_assets(post)
                 
         print('')
-        published[post_id] = relays_published  # Update cache
-        utils.save_cache(cache_file, published)   # Save the updated cache
+        published[post.d_tag] = relays_published  # Update cache
+        utils.save_cache(usr.caches_posts, published)   # Save the updated cache
         sleep(delay)  # Add delay between publishing posts
-    

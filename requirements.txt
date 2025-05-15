@@ -11,15 +11,16 @@ coincurve==21.0.0
 # Relay communication:
 websocket-client==1.8.0
 
+# HTML to Markdown converter:
+html-to-markdown==1.2.1
+
 # Not used in current implementation:
 #ecdsa==0.19.1
 #certifi==2025.1.31
 #charset-normalizer==3.4.1
 #confini==0.6.5
-#html-to-markdown==1.2.1
 #idna==3.10
 #python-gnupg==0.4.9
 #soupsieve==2.6
 #typing_extensions==4.13.0
 #urllib3==2.3.0
-

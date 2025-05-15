@@ -13,6 +13,7 @@ def get_keys(priv_key: str):
     Returns:
         tuple: A tuple containing the PrivateKey object and the public key in hex format.
     """
+
     # Handle hex format private key
     if re.fullmatch(r'[0-9a-fA-F]{64}', priv_key):
         priv_key_bytes = bytes.fromhex(priv_key) 
@@ -49,3 +50,4 @@ def encode_npub(pub_key_hex: str):
     pub_key_bytes = bytes.fromhex(pub_key_hex)
     data = convertbits(list(pub_key_bytes), 8, 5)
     return bech32_encode("npub", data)
+

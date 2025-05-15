@@ -1,23 +1,13 @@
 # standard imports
 import re
-from dataclasses import dataclass
-from sys import exit
-from typing import List
 
 # external imports
 import confini
 
 # local imports
 import keys
-from utils import print_red
-
-
-@dataclass
-class NostrConfig:
-    private_key: str
-    public_key: str
-    npub_key: str  
-    relays: List[str]
+from models import Usr
+from errors import error_and_exit
 
 
 def parse_config(path_to_config: str):
@@ -28,14 +18,12 @@ def parse_config(path_to_config: str):
     try:
         private_key = config.get('USER_PRIVATE_KEY')
     except KeyError:
-        print_red(f"Error: Missing 'private_key'. Please provide in '{path_to_config}/config.ini'.")
-        exit(1)
+        error_and_exit(1)
     
     try:
         relays_str = config.get('NOSTR_RELAYS')
     except KeyError:
-        print_red(f"Error: Missing 'relays'. Please provide in '{path_to_config}/config.ini'.")
-        exit(1)
+        error_and_exit(2)
     
     # Convert relay string to list
     # Split by any combination of commas and whitespace (incl. newlines), and remove extra spaces
@@ -47,7 +35,6 @@ def parse_config(path_to_config: str):
         priv_key, pub_key = keys.get_keys(private_key)
         
     if priv_key is None:
-        print_red(f"Error: Invalid private key. Please provide in '{path_to_config}/config.ini'.")
-        exit(1)
-        
-    return NostrConfig(priv_key, pub_key, keys.encode_npub(pub_key), relays)
+        error_and_exit(3)
+
+    return Usr(priv_key, pub_key, keys.encode_npub(pub_key), relays, ".caches/posts/caches.json")
