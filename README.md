@@ -69,11 +69,20 @@ This repo’s codespace is pre-configured with all dependencies through the devc
  - **Optional:** After unzipping the archive, you can remove any posts you don’t want to migrate by deleting their corresponding `.html` files in the `posts/` folder. Make sure to also remove these posts from the `posts.csv` file.
  - Place the export zip file or directory into `user_entries/export/`. It should contain a `posts.csv` file and a `posts/` directory with your `.html` files.
    
-3. **Provide Key and Relays**   
- - Add your private key (in hex or nsec format) and the relays you'd like to publish to in the `config.ini` file in `user_entries/`.
- - The private key is used **only** to sign Nostr events and is **never shared**.
- - To generate a random key at runtime, simply set the private key to `x`.
- - ⚠️ Note: Some relays may require prior authorization and might reject events from unknown keys.
+3. **Set Configurations**
+Provide the following information in the `user_entries/config.ini` file:   
+- **Private key:** Enter your Nostr private key in hex or nsec format, or set it to `x` to generate a random key at runtime. *This key is used only to sign Nostr events locally and is never shared.*   
+⚠️ Note: Some relays may require prior authorization and might reject events from unknown keys.
+- **Post type:** Choose what kind of post you want to publish:
+  - `note` — short, unformatted notes (like tweets)
+  - `blog` — longer, formatted blog-style posts
+- **Relays:** List the WebSocket URLs of the relays you want to publish to.
+- **Image hosting (optional)**: Choose how you'd like to handle images by setting `image_host` to one of the following:
+  - `substack` – Keep the original image URLs from Substack
+  - `imgur` – Upload images to [imgur.com](imgur.com)
+  - `wala` – Upload images to your own [WALA server](https://github.com/nolash/WALA) (a self-hosted image store)    
+  If you choose `wala`, make sure to set your `wala_url`.   
+  If you choose `imgur`, you'll need to provide your `imgur_client_id`.   
       
 4. **Run `nostr-nomad`**   
    Once everything is set up, you can run the following commands:
