@@ -14,7 +14,7 @@ Supports:
 Features:
 - Maintains a local archive of all exported post text, associated images, and publishing metadata.
 - Optionally re-hosts images to move media off Substack’s CDN
-    - Supported image hosts: **Imgur** (anonymous uploads) and any self-hosted **HTTP file server running [WALA](https://github.com/nolash/WALA)**
+    - Supported hosts: **Imgur** (anonymous uploads) and any self-hosted **HTTP file server running [WALA](https://github.com/nolash/WALA)**
 
 ---
 
