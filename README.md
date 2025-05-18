@@ -47,8 +47,7 @@ To generate documentation, please install **Texinfo** and **TeX** first:
    - **Ubuntu/Debian**: `sudo apt install texinfo texlive -y`
    - **macOS**: `brew install texinfo texlive`
 
-Make sure groff is installed to display the CLI manual: `groff --version`
-If not installed, install it via:  
+Make sure groff is installed to display the CLI manual: `groff --version`. If not installed, install it via:  
    - **Ubuntu/Debian**: `sudo apt install groff`
    - **macOS**: `brew install groff`
 
