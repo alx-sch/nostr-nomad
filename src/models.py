@@ -25,7 +25,7 @@ class   User:
 		pub_key (str):			The derived public key.
 		npub_key (str):			The public key in NIP-19 'npub' format.
 		relays (list[str]):		List of Nostr relay URLs.
-		event_type (str):		Type of event to be sent (e.g. 'text', 'article').
+		event_type (str):		Type of event to be sent (e.g. 'note', 'blog').
 		image_host (str):		Preferred image hosting service ('substack', 'wala', 'imgur').
 		wala_url (str):			URL for the WALA image hosting service.
 		imgur_client_id (str):	Client ID for the Imgur image hosting service.

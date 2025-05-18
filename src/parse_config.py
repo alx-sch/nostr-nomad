@@ -8,7 +8,7 @@ validates them, and returns a populated `User` object.
 
 Expected config fields:
 - [USER] PRIVATE_KEY
-- [NOSTR] EVENT_TYPE (must be "text" or "article")
+- [NOSTR] EVENT_TYPE (must be "note" or "blog")
 - [NOSTR] RELAYS (comma- or space-separated)
 - [IMAGE_HOSTING] IMAGE_HOST (must be "substack", "wala", or "imgur")
 
@@ -59,7 +59,7 @@ def parse_config(path_to_config: str):
         event_type = config.get('NOSTR_EVENT_TYPE')
     except KeyError:
         error_and_exit(MISSING_EVENT_TYPE)
-    if event_type not in ["text", "article"]:
+    if event_type not in ["note", "blog"]:
         error_and_exit(MISSING_EVENT_TYPE)
     
     # Retrieve the relay URLs

@@ -85,7 +85,7 @@ def	build_posts(paths: Paths, user: User):
 			
 			if (post.is_published):
 				imgs.handle_imgs(paths, post, user, count_imgs) # Downloads images to cache and uploads them to the new image host.
-				if (user.event_type == "article"):
+				if (user.event_type == "blog"):
 					build_longform(post, str(post.html_content))
 				else:
 					build_shortform(post, post.html_content)
@@ -114,7 +114,7 @@ def	build_posts(paths: Paths, user: User):
     
 		if (count_built > 0):
 			print(f"🛠️  Built {count_built} ", end="")
-			if (user.event_type == "article"):
+			if (user.event_type == "blog"):
 				print("long-form post(s) for publishing to Nostr.")
 			else:
 				print("short-form post(s) for publishing to Nostr.")
