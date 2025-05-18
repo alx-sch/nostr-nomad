@@ -1,12 +1,23 @@
+""" build_post_shortform.py
+
+Handles the construction of long-form Nostr events from Substack-style posts.
+
+This module extracts plain text and image URLs from HTML content,
+prepends optional title and subtitle, and sets up the post object
+for a short-form Nostr event (kind 1).
+"""
+
 # external imports
 from bs4 import BeautifulSoup
 
 # local imports
-from models import Posts
+from models import Post
 
 
 def html_to_text(content: BeautifulSoup) -> str:
-    """Extracts readable text and image URLs from an BeautifulSoup object."""
+    """Extracts readable text and image URLs from an BeautifulSoup object.
+    Converts headings and paragraph content into plain text and includes image URLs inline.
+    Skips button-style links."""
     result = []
 
     text_tags = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p']
@@ -25,7 +36,8 @@ def html_to_text(content: BeautifulSoup) -> str:
 
 
 def add_titles(message: str, title: str, subtitle: str) -> str:
-    """Adds title and subtitle to the beginning of a message."""
+    """Prepends the title and subtitle to the message body.s
+    Title is wrapped in brackets and appears at the top. Subtitle appears below it if present."""
     if subtitle:
         message = f"{subtitle}\n\n{message}"
     if title:
@@ -33,9 +45,9 @@ def add_titles(message: str, title: str, subtitle: str) -> str:
     return (message)
 
 
-def build_shortform(post: Posts, html_content: BeautifulSoup):
-    """Adds the correct content format (plaintext message with title and subtitle if available)
-    and event kind for a shortform event."""
+def build_shortform(post: Post, html_content: BeautifulSoup):
+    """Prepares the post for a Nostr short-form event (kind 1).
+    Extracts readable text from HTML, prepends title/subtitle, and assigns the correct event kind."""
     message = html_to_text(html_content)
     post.content = add_titles(message, post.title, post.subtitle)
     post.kind = 1

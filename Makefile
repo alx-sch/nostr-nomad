@@ -4,17 +4,17 @@
 
 NAME :=			nostr-nomad
 
-PYTHON :=		python3
+PYTHON :=		python3.11
 VENV :=			env
 
 SRC :=			src
 SRCS :=			$(wildcard $(SRC)/*.py)
 
-# Hidden folder to store caches
-CACHES :=	.caches
-
 # User input folder, export folder (put substack export here)
 EXPORT_DIR := user_entries/export
+
+# Folder to store cache
+CACHE :=	cache/
 
 # Documentation
 DOCS := docs
@@ -53,10 +53,9 @@ install: $(VENV)/bin/activate
 
 # Run the main script
 run: $(VENV)/bin/activate $(SRCS)
-	@echo "$(BOLD)$(YELLOW)Running $(NAME)...$(RESET)"
-	@rm -f $(EXPORT_DIR)/.gitkeep
+	@echo "\n==================== $(BOLD)nostr-nomad$(RESET) ====================\n"
+	@rm -f $(EXPORT_DIR)/.gitkeep*
 	@$(VENV)/bin/python $(SRC)/main.py
-	@echo "$(BOLD)$(GREEN)Done.$(RESET)"
 	@touch $(EXPORT_DIR)/.gitkeep
 
 #################
@@ -98,21 +97,26 @@ sphinx_check:
 sphinx: sphinx_check
 	@echo "$(BOLD)$(YELLOW)Generating Sphinx documentation...$(RESET)"
 	@mkdir -p $(BUILD_DIR)/sphinx
-	@$(VENV)/bin/sphinx-build -b html $(DOCS)/sphinx/source $(BUILD_DIR)/sphinx
+	@$(VENV)/bin/sphinx-build -b html $(DOCS)/sphinx $(BUILD_DIR)/sphinx
+	@echo "$(BOLD)$(GREEN)Done.$(RESET)"
+
+man:
+	@echo "$(BOLD)$(YELLOW)Displaying the CLI manual...$(RESET)"
+	@groff -man -Tutf8 docs/nostr-nomad.1 | less -R
 	@echo "$(BOLD)$(GREEN)Done.$(RESET)"
 
 ##################
 # CLEAN TARGETS  #
 ##################
 
-# Clean up everything, including the cache keeping track of publishing history
-clean-all: clean clean-cache
+# Clean up everything, including the cache and provided export data
+clean-all: clean clean-docs clean-cache clean-export
 
 # Clean everything (environment, docs, cache)
-clean: clean-env clean-docs clean-temp
+clean: uninstall clean-temp
 
 # Remove virtual environment
-clean-env:
+uninstall:
 	@echo "$(BOLD)$(YELLOW)Removing virtual environment...$(RESET)"
 	@rm -rf $(VENV)
 	@echo "$(BOLD)$(GREEN)Done.$(RESET)"
@@ -121,21 +125,28 @@ clean-env:
 clean-docs:
 	@echo "$(BOLD)$(YELLOW)Cleaning up documentation...$(RESET)"
 	@rm -rf $(BUILD_DIR)
-#	@rm -f $(README)
+	@rm -rf doc.*
+	@rm -f $(README)
 	@echo "$(BOLD)$(GREEN)Done.$(RESET)"
 
 # Remove unzipped export data
 clean-temp:
-	@echo "$(BOLD)$(YELLOW)Cleaning up temporay files...$(RESET)"
+	@echo "$(BOLD)$(YELLOW)Cleaning up temporary files...$(RESET)"
 	@rm -rf $(SRC)/__pycache__
 	@rm -f $(DOCS)/doc.aux $(DOCS)/doc.toc $(DOCS)/doc.log
 	@echo "$(BOLD)$(GREEN)Done.$(RESET)"
 
 # Remove the cache keeping track of publishing history
 clean-cache:
-	@echo "$(BOLD)$(YELLOW)Cleaning up publishing cache...$(RESET)"
-	@rm -f $(CACHES)/assets/*
-	@rm -f $(CACHES)/posts/caches.json
+	@echo "$(BOLD)$(YELLOW)Cleaning up cache...$(RESET)"
+	@rm -rf $(CACHE)
 	@echo "$(BOLD)$(GREEN)Done.$(RESET)"
 
-.PHONY: all run install clean clean-env clean-docs clean-temp
+clean-export:
+	@echo "$(BOLD)$(YELLOW)Cleaning up export data...$(RESET)"
+	@rm -rf $(EXPORT_DIR)
+	@mkdir $(EXPORT_DIR)
+	@touch $(EXPORT_DIR)/.gitkeep
+	@echo "$(BOLD)$(GREEN)Done.$(RESET)"
+
+.PHONY: all run install clean clean-env clean-docs clean-temp man

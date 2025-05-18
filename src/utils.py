@@ -1,32 +1,66 @@
+""" utils.py
+
+Utility functions for printing colored messages and debug info, caching JSON data, and file hashing.
+
+Includes:
+- Colored console output helpers (green, red, yellow, error to stderr)
+- JSON cache load/save with directory creation
+- SHA256 file hashing
+"""
+
 # standard imports
 import json
 import os
+import hashlib
 from sys import stderr
 from datetime import date
 
 # local imports
-from models import Posts
+from models import Post, Paths, User
+
+
+BOLD_GREEN = '\033[1m\033[32m'
+BOLD_RED = '\033[1m\033[31m'
+BOLD_YELLOW = '\033[1m\033[33m'
+BOLD = '\033[1m'
+ITALIC = '\033[3m' 
+RESET = '\033[0m'
 
 
 def print_green(message: str):
     """ Prints a message in green."""
-    bold_green = '\033[1m\033[32m'
-    reset = '\033[0m'
-    print(f"{bold_green}{message}{reset}")
+    print(f"{BOLD_GREEN}{message}{RESET}")
     
     
 def print_red(message: str):
     """ Prints a message in red."""
-    bold_red = '\033[1m\033[31m'
-    reset = '\033[0m'
-    stderr.write(f"{bold_red}{message}{reset}")
+    print(f"{BOLD_RED}{message}{RESET}")
     
-
+    
 def print_yellow(message: str):
     """ Prints a message in yellow."""
-    yellow = '\033[1m\033[33m'
-    reset = '\033[0m'
-    print(f"{yellow}{message}{reset}")
+    print(f"{BOLD_YELLOW}{message}{RESET}")
+    
+    
+def print_error(message: str):
+    """ Prints an error message in red to stderr (including a newline)."""
+    stderr.write(f"{BOLD_RED}{message}{RESET}\n")
+    
+    
+def	debug_print(paths: Paths, user: User, posts: list[Post]):
+	"""Prints out all stored values after parsing and storing."""
+	print_yellow("##### DEBUG #####\n")
+	print("Html-files:\n", paths.html_files, "\n") # Prints out the html-files' paths.
+	print("CSV-files:\n", paths.csv_files, "\n") # Prints out the csv-files' paths.
+	print("posts.csv-file:\n", paths.posts_csv, "\n")
+	print("Image URLs:\n", paths.image_urls, "\n")
+	print_yellow("##### ALL POSTS #####\n")
+	for post in posts:
+		print("Title: ", post.title)
+		print("Subtitle: ", post.subtitle)
+		print(post.content)
+	print("User private key:\n", user.priv_key, "\n")
+	print("User relays:\n", user.relays, "\n")
 
 
 def load_cache(path: str):
@@ -38,32 +72,21 @@ def load_cache(path: str):
 
 
 def save_cache(path: str, data: dict):
-    """ Save cache to a JSON file."""
-    with open(path, 'w', encoding = 'utf-8') as f:
+    """ Save cache to a JSON file, creating parent directories if needed."""
+    dir_path = os.path.dirname(path)
+    if dir_path and not os.path.exists(dir_path):
+        os.makedirs(dir_path, exist_ok=True)
+    with open(path, 'w', encoding='utf-8') as f:
         json.dump(data, f)
 
 
-def store_assets(post: Posts):
-    """Stores a list of the URLs of the images published to nostr in .caches/assets (if 
-    not already stored)."""
-    file_path = f".caches/assets/" + str(date.today()) # Stores the file path
-    os.makedirs(".caches/assets", exist_ok=True) # Makes an assets directory if it doesnt exist.
-
-    existing_urls = set() # Creates an empty collection of unique elements.
-    if os.path.isfile(file_path): # Checks if file exists
-        with open(file_path, "r") as f: # Opens file in read mode
-            existing_urls = set(line.strip() for line in f) # Extracts all URLs listed in the file.
-
-    with open(file_path, "a") as f: # Opens file in append mode.
-        for url in post.image_urls: # Iterates through the user input URLs.
-            if url not in existing_urls: # If URL is not already in caches-file.
-                f.write(url + "\n") # Adds the URL to the caches-file.
-
-
-def	user_prompt_post_type():
-	"""Prompts the user to choose between short or long form content, and returns the type."""
-	while (1):
-		post_type = input("Would you like to post your content as blog posts or regular posts?\nEnter 1 for blog post (long form, kind 30023)\nEnter 2 for regular post (short form, kind 1)\n: ")
-		if (post_type == "1" or post_type == "2"):
-			break
-	return post_type
+def sha256_hash(path):
+    """Computes the SHA256 hash of a file."""
+    hash_sha256 = hashlib.sha256()
+    with open(path, "rb") as f:
+        while True:
+            chunk = f.read(8192)  # read in chunks to handle large files
+            if not chunk:
+                break
+            hash_sha256.update(chunk)
+    return hash_sha256.hexdigest()

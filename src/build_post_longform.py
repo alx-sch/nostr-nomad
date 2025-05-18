@@ -1,3 +1,14 @@
+""" build_post_longform.py
+
+Handles the construction of long-form Nostr events from Substack-style posts.
+
+This module:
+- Converts post dates to Unix timestamps (Nostr-compatible).
+- Extracts metadata such as title, subtitle, and tags.
+- Converts HTML content to Markdown.
+- Assembles the final Post object fields: `content`, `kind`, and `tags`.
+"""
+
 # standard imports
 from datetime import datetime
 
@@ -5,19 +16,20 @@ from datetime import datetime
 from html_to_markdown import convert_to_markdown
 
 # local imports
-from models import Posts
+from models import Post
 
 
 def convert_published_time(time: str):
-	"""Converts the post date (substack format) to correct nostr format."""
+	"""Converts an ISO 8601 timestamp (from Substack-style format) into a Unix timestamp string,
+    which is the format required by Nostr."""
 	dt = datetime.fromisoformat(time.replace("Z", "+00:00")) # Parse into datetime object
 	unix_seconds = int(dt.timestamp()) # Get Unix timestamp (seconds since epoch)
 	return(str(unix_seconds)) # Stringify
 
 
-def	get_tags(post: Posts):
-	"""Initializes a list of tags, stores the post's metadata (to be used for nostr event), and
-	returns the list."""
+def	get_tags(post: Post):
+	"""Builds a list of Nostr tags from post metadata.
+    Includes title, subtitle (if present), publication time, and a unique identifier tag "d"."""
 	tags = []
 	if post.title is not None:
 		tags.append(["title", post.title])
@@ -28,8 +40,9 @@ def	get_tags(post: Posts):
 	return (tags)
 
 
-def build_longform(post: Posts, html_content: str):
-	"""Adds the correct content format, event kind and tags for a longform event."""
+def build_longform(post: Post, html_content: str):
+	"""Prepares the post for a Nostr long-form event (kind 30023).
+    Converts HTML content to Markdown, sets the event kind, and attaches tags."""
 	post.content = convert_to_markdown(str(html_content))
 	post.kind = 30023
 	post.tags = get_tags(post)

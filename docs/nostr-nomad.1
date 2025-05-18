@@ -1,0 +1,52 @@
+.TH NOSTR-NOMAD 1 "May 2025" "nostr-nomad 0.1"
+.SH NAME
+nostr-nomad \- migrate content from Substack to Nostr
+
+.SH SYNOPSIS
+make
+
+.SH DESCRIPTION
+\fBnostr-nomad\fR is a tool that migrates exported Substack data to the Nostr protocol.
+
+It processes your Substack export, converts it to a short form or long form Nostr event, and sends it to one or more relays
+of your choice.
+
+.SH CONFIGURATION
+Add your \fBprivate key\fR and the \fBrelays\fR you want to post to as instructed in the \fBuser_entries/config.ini\fR file.
+
+Add your \fBsubstack export data\fR in the \fBuser_entries/export\fR directory.
+
+.SH USAGE
+Run \fBmake\fR.
+
+Once everything is set up, you will be prompted for how you want your posts to be published.
+
+.TP
+\fBOption 1\fR
+Long form content (blog post format). This is the intended use.
+
+.TP
+\fBOption 2\fR
+Short form content (a "tweet"-like short message format).
+
+.SH DEPENDENCIES
+To generate documentation using "make", you need to install Texinfo and TeX:
+
+Ubuntu/Debian:
+sudo apt install texinfo texlive -y
+
+Additionally, you will need Python 3 (version 3.11.x) and its dependencies. 
+The tool will automatically install its dependencies within a virtual environment when you set up the project.
+
+.SH FILES
+\fBsrc\fR (dir)
+\fBuser_entries\fR (dir)
+\fBmakefile\fR
+\fBrequirements.txt\fR
+\fBLICENSE\fR
+
+.SH AUTHORS
+Alex Schenk and Natalie Rekedal Holbrook
+
+.SH LICENSE
+See LICENSE

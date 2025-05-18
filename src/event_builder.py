@@ -1,10 +1,21 @@
+""" event_builder.py
+
+Module for building and signing Nostr events.
+
+This includes:
+- Creating unsigned Nostr event payloads
+- Serializing and hashing events
+- Producing Schnorr-signed event packets ready for relay publishing
+"""
+
 # standard imports
 from hashlib import sha256
 from json import dumps
 from time import time
+from typing import List
 
 
-def build_unsigned_event(content: str, pub_key: str, tags: list[str], kind):
+def build_unsigned_event(content: str, pub_key: str, tags: List[str], kind):
     """ Creates an unsigned Nostr event as a list, ready for hashing/signing.
 
     Parameters:
@@ -30,16 +41,18 @@ def build_unsigned_event(content: str, pub_key: str, tags: list[str], kind):
 
 
 def build_signed_event(message: str, priv_key: str, pub_key: str, tags: list[str], kind: int):
-    """ Creates and signs a Nostr event using Schnorr signature.
+    """
+    Creates and signs a Nostr event using Schnorr signature.
 
     Parameters:
-        content (str): The message content.
-        nostr (NostrConfig): Nostr configuration object containing private and public keys.
-        kind (int): Nostr event kind (default is 1 for text notes).
-        tags (List, optional): Tags list.
+        message (str): The message content.
+        priv_key (PrivateKey): coincurve PrivateKey object.
+        pub_key (str): Hex-encoded public key.
+        tags (list[str]): List of tags.
+        kind (int): Nostr event kind.
 
     Returns:
-        str: JSON-encoded signed Nostr event.
+        str: JSON-encoded signed Nostr event, wrapped in a relay packet.
     """
     # Create the unsigned event data
     event = build_unsigned_event(message, pub_key, tags, kind)
@@ -62,9 +75,9 @@ def build_signed_event(message: str, priv_key: str, pub_key: str, tags: list[str
         "sig": sig.hex(),  # Schnorr signature of the event hash
     }
     # Relay expects the event to be in a list format
-    event_packet = [
+    relay_payload = [
         "EVENT",  
         event_signed,  
     ]
     
-    return dumps(event_packet, ensure_ascii = False)
+    return dumps(relay_payload, ensure_ascii = False)
