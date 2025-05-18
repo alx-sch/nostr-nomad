@@ -93,6 +93,13 @@ sphinx_check:
 		echo "$(BOLD)$(GREEN)Sphinx installed successfully.$(RESET)"; \
 	fi
 
+# Generate .rst files for all modules using sphinx-apidoc
+# Run manually when adding new modules / functions
+sphinx_apidoc:
+	@echo "$(BOLD)$(YELLOW)Generating .rst files from Python modules...$(RESET)"
+	@$(VENV)/bin/sphinx-apidoc -o $(DOCS)/sphinx/api $(SRC) --force --no-toc
+	@echo "$(BOLD)$(GREEN)RST files generated.$(RESET)"
+
 # Generate Sphinx documentation (for Python code)
 sphinx: sphinx_check
 	@echo "$(BOLD)$(YELLOW)Generating Sphinx documentation...$(RESET)"
