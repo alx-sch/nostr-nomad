@@ -66,7 +66,7 @@ This repo’s codespace is pre-configured with all dependencies through the devc
    ```
 2. **Provide Substack Export**   
  - Export your Substack data (check [here](https://support.substack.com/hc/en-us/articles/360037466012-How-do-I-export-my-posts)).
- - Optional: Unzip the archive and remove any posts you don’t want to migrate by deleting the corresponding `.html` files in the `posts/` folder (remember to also remove them from the `posts.csv`-file, as the parser is quite strict).
+ - **Optional:** After unzipping the archive, you can remove any posts you don’t want to migrate by deleting their corresponding `.html` files in the `posts/` folder. Make sure to also remove these posts from the `posts.csv` file.
  - Place the export zip file or directory into `user_entries/export/`. It should contain a `posts.csv` file and a `posts/` directory with your `.html` files.
    
 3. **Provide Key and Relays**   
