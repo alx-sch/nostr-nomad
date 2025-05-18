@@ -99,7 +99,9 @@ Provide the following information in the `user_entries/config.ini` file:
   
 5. XXXX (cache/archive etc.)
 
-#### ⚠️ Troubleshooting
+--- 
+
+### ⚠️ Troubleshooting
 
 If you run into issues like:   
 - `ModuleNotFoundError`
