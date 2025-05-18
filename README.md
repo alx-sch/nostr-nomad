@@ -11,6 +11,11 @@ Supports:
 - Short-form content (event `kind:1`; [NIP-1](https://nostr-nips.com/nip-01)) — such as "Tweet"-style messages (no formatting).
 - Long-form content (event `kind:30023`; [NIP-23](https://nostr-nips.com/nip-23)) — such as blog posts (with Markdown formatting).
 
+Features:
+- Maintains a local archive of all exported post text, associated images, and publishing metadata.
+- Optionally re-hosts images to move media off Substack’s CDN
+    - Supported image hosts: **Imgur** (anonymous uploads) and any self-hosted **HTTP file server running [WALA](https://github.com/nolash/WALA)**
+
 ---
 
 ## Requirements
