@@ -20,6 +20,10 @@ Features:
 
 ## Requirements
 
+All Python dependencies will be automatically installed into a virtual environment located at `env/`. 
+
+#### System Dependencies  
+
 You'll need **Python 3.11.x** to run the project.  
 
  - Check your Python version: `python3.11 --version`   
@@ -37,13 +41,20 @@ You'll need **Python 3.11.x** to run the project.
      brew install python@3.11
      brew link --force python@3.11 # Makes 'python3.11' command accessible system-wide
      ```
-        
-All Python dependencies will be automatically installed into a virtual environment located at `env/`. 
 
-To generate documentation using `make docs`, please install **Texinfo** and **TeX** first:
+To generate documentation, please install **Texinfo** and **TeX** first:
 
    - **Ubuntu/Debian**: `sudo apt install texinfo texlive -y`
    - **macOS**: `brew install texinfo texlive`
+
+Make sure groff is installed to display the CLI manual: `groff --version`
+If not installed, install it via:  
+   - **Ubuntu/Debian**: `sudo apt install groff`
+   - **macOS**: `brew install groff`
+
+#### Ready-to-use Codespace
+
+This repo’s codespace is pre-configured with all dependencies through the devcontainer. Feel free to quickly try out `nostr-nomad` there.
 
 ---
 
