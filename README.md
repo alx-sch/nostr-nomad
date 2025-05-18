@@ -62,6 +62,34 @@ To generate documentation using `make docs`, please install **Texinfo** and **Te
     <img src="https://github.com/alx-sch/nostr-nomad/blob/main/.assets/running_nostr-nomad_2.png" width="600" alt="running_nostr-nomad_2.png"/>
 </p>
 
+```python
+import requests
+
+def delete_images_from_imgur(cache: dict, client_id: str):
+    """
+    Deletes images from Imgur using delete tokens stored in the cache 'image.json'.
+
+    Parameters:
+        cache (dict): 'image.json' as created by bnostr-nomad.
+        client_id (str): Imgur API client ID.
+    """
+    headers = {"Authorization": f"Client-ID {client_id}"}
+    
+    for filename, info in cache.items():
+        delete_token = info.get("delete_token")
+        if not delete_token:
+            print(f"Skipping {filename}: no delete token available.")
+            continue
+
+        url = f"https://api.imgur.com/3/image/{delete_token}"
+        response = requests.delete(url, headers=headers)
+
+        if response.status_code == 200:
+            print(f"Deleted {filename} successfully.")
+        else:
+            print(f"Failed to delete {filename}: {response.status_code} - {response.text}")
+```
+      
 ---
 
 ## Setting up a Local Nostr Relay for Testing
