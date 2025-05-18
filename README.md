@@ -20,7 +20,24 @@ Features:
 
 ## Requirements
 
-You'll need **Python 3** (version 3.7 or higher) to run the project.  
+You'll need **Python 3.11.x** to run the project.  
+
+ - Check your Python version: `python3.11 --version`   
+ - If the command is not found, please follow the instructions below to install it and check again:   
+   - **Ubuntu/Debian**:
+     ```bash
+     sudo apt update
+     sudo apt install software-properties-common -y
+     sudo add-apt-repository ppa:deadsnakes/ppa -y
+     sudo apt update
+     sudo apt install python3.11 python3.11-venv python3.11-dev -y
+     ```
+   - **macOS**:
+     ```bash
+     brew install python@3.11
+     brew link --force python@3.11 # Makes 'python3.11' command accessible system-wide
+     ```
+        
 All Python dependencies will be automatically installed into a virtual environment located at `env/`. 
 
 To generate documentation using `make docs`, please install **Texinfo** and **TeX** first:
