@@ -84,12 +84,36 @@ Provide the following information in the `user_entries/config.ini` file:
   If you choose `wala`, make sure to set your `wala_url`.   
   If you choose `imgur`, you'll need to provide your `imgur_client_id`.   
       
-4. **Run `nostr-nomad`**   
-   Once everything is set up, you can run the following commands:
-- `make` to build and execute the tool.
-- `make docs` to generate the documentation for the project (WIP).
-- `make clean` to remove compiled files, the virtual environment, and documentation.
-- `make clean-all` to also remove the cache (in `user_input/`). Please note that previously published posts are tracked in the cache, preventing duplicates from being sent to the same relay.
+4. **Run `nostr-nomad`**
+    - **Build and Run**    
+       `make` — Sets up the virtual environment, installs dependencies, and runs the tool.
+    - **Generate Documentation** (WIP)    
+       `make docs` — Builds documentation in various formats: `README.md`, HTML, PDF.    
+       `make clean-docs` — Removes generated documentation files.
+    - **View Man Page** (WIP)    
+       `make man` — Displays a terminal-friendly manual for quick command reference.
+    - **Clean Build Artifacts**    
+        `make clean` — Removes the virtual environment and temporary files.
+    - **Full Cleanup**   
+        `make clean-all` — Removes everything: environment, docs, cache/archive, and Substack export data.
+  
+5. XXXX (cache/archive etc.)
+
+#### ⚠️ Troubleshooting
+
+If you run into issues like:   
+- `ModuleNotFoundError`
+- Environment seems broken or misconfigured
+- Tool fails to run right after a `make`
+
+Try resetting the environment:
+```bash
+make uninstall
+make install
+```
+
+relay publishing issues (timeout, incorrect imgur ID etc)
+
 
 --- 
 
