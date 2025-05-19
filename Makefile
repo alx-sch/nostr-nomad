@@ -20,7 +20,7 @@ CACHE :=	cache/
 DOCS := docs
 TEXINFO := $(DOCS)/doc.texi
 BUILD_DIR := build_docs
-README := README.md
+README := $(BUILD_DIR)/README.md
 
 ######################
 # FORMATTING STRINGS #
@@ -68,6 +68,7 @@ docs: $(README) texinfo sphinx
 # Generate README.md from Texinfo
 $(README): $(TEXINFO)
 	@echo "$(BOLD)$(YELLOW)Generating README.md...$(RESET)"
+	@mkdir -p $(BUILD_DIR)
 	@makeinfo --plaintext --output=$(README) $(TEXINFO)
 	@echo "$(BOLD)$(GREEN)Done.$(RESET)"
 
@@ -84,7 +85,7 @@ texinfo: $(TEXINFO)
 	@echo "$(BOLD)$(GREEN)Done.$(RESET)"
 
 # Check if sphinx-build exists in the virtual environment, if not create the venv and install sphinx
-sphinx_check:
+sphinx-install:
 	@if [ ! -f "$(VENV)/bin/sphinx-build" ]; then \
 		echo "$(BOLD)$(YELLOW)Installing Sphinx in the virtual environment...$(RESET)"; \
 		$(PYTHON) -m venv $(VENV);  \
@@ -95,13 +96,13 @@ sphinx_check:
 
 # Generate .rst files for all modules using sphinx-apidoc
 # Run manually when adding new modules / functions
-sphinx_apidoc:
+sphinx-apidoc:
 	@echo "$(BOLD)$(YELLOW)Generating .rst files from Python modules...$(RESET)"
 	@$(VENV)/bin/sphinx-apidoc -o $(DOCS)/sphinx/api $(SRC) --force --no-toc
 	@echo "$(BOLD)$(GREEN)RST files generated.$(RESET)"
 
 # Generate Sphinx documentation (for Python code)
-sphinx: sphinx_check
+sphinx: sphinx-install
 	@echo "$(BOLD)$(YELLOW)Generating Sphinx documentation...$(RESET)"
 	@mkdir -p $(BUILD_DIR)/sphinx
 	@$(VENV)/bin/sphinx-build -b html $(DOCS)/sphinx $(BUILD_DIR)/sphinx
@@ -133,7 +134,6 @@ clean-docs:
 	@echo "$(BOLD)$(YELLOW)Cleaning up documentation...$(RESET)"
 	@rm -rf $(BUILD_DIR)
 	@rm -rf doc.*
-	@rm -f $(README)
 	@echo "$(BOLD)$(GREEN)Done.$(RESET)"
 
 # Remove unzipped export data
