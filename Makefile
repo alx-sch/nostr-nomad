@@ -85,24 +85,22 @@ texinfo: $(TEXINFO)
 	@echo "$(BOLD)$(GREEN)Done.$(RESET)"
 
 # Check if sphinx-build exists in the virtual environment, if not create the venv and install sphinx
-sphinx-install:
+sphinx-install: install
 	@if [ ! -f "$(VENV)/bin/sphinx-build" ]; then \
 		echo "$(BOLD)$(YELLOW)Installing Sphinx in the virtual environment...$(RESET)"; \
-		$(PYTHON) -m venv $(VENV);  \
-		$(VENV)/bin/pip install --upgrade pip; \
 		$(VENV)/bin/pip install sphinx==8.2.3; \
 		echo "$(BOLD)$(GREEN)Sphinx installed successfully.$(RESET)"; \
 	fi
 
 # Generate .rst files for all modules using sphinx-apidoc
-# Run manually when adding new modules / functions
+# Run manually when adding new modules, functions, etc.
 sphinx-apidoc:
 	@echo "$(BOLD)$(YELLOW)Generating .rst files from Python modules...$(RESET)"
 	@$(VENV)/bin/sphinx-apidoc -o $(DOCS)/sphinx/api $(SRC) --force --no-toc
 	@echo "$(BOLD)$(GREEN)RST files generated.$(RESET)"
 
 # Generate Sphinx documentation (for Python code)
-sphinx: sphinx-install
+sphinx: sphinx-install sphinx-apidoc
 	@echo "$(BOLD)$(YELLOW)Generating Sphinx documentation...$(RESET)"
 	@mkdir -p $(BUILD_DIR)/sphinx
 	@$(VENV)/bin/sphinx-build -b html $(DOCS)/sphinx $(BUILD_DIR)/sphinx
@@ -140,7 +138,8 @@ clean-docs:
 clean-temp:
 	@echo "$(BOLD)$(YELLOW)Cleaning up temporary files...$(RESET)"
 	@rm -rf $(SRC)/__pycache__
-	@rm -f $(DOCS)/doc.aux $(DOCS)/doc.toc $(DOCS)/doc.log
+	@rm -f $(DOCS)/*.aux $(DOCS)/*.toc $(DOCS)/*.log
+	@rm -rf $(DOCS)/sphinx/api
 	@echo "$(BOLD)$(GREEN)Done.$(RESET)"
 
 # Remove the cache keeping track of publishing history
@@ -156,4 +155,4 @@ clean-export:
 	@touch $(EXPORT_DIR)/.gitkeep
 	@echo "$(BOLD)$(GREEN)Done.$(RESET)"
 
-.PHONY: all run install clean clean-env clean-docs clean-temp man
+.PHONY: all run install clean clean-env clean-docs clean-temp man clean-cache clean-export sphinx sphinx-install sphinx-apidoc uninstall
