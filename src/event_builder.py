@@ -1,4 +1,4 @@
-""" event_builder.py
+"""event_builder.py
 
 Module for building and signing Nostr events.
 
@@ -14,9 +14,12 @@ from json import dumps
 from time import time
 from typing import List
 
+# external imports
+from coincurve import PrivateKey
+
 
 def build_unsigned_event(content: str, pub_key: str, tags: List[str], kind):
-    """ Creates an unsigned Nostr event as a list, ready for hashing/signing.
+    """Creates an unsigned Nostr event as a list, ready for hashing/signing.
 
     Parameters:
         content (str): The event content.
@@ -28,19 +31,21 @@ def build_unsigned_event(content: str, pub_key: str, tags: List[str], kind):
         List: The event in unsigned list format [0, pubkey, created_at, kind, tags, content].
     """
     t = int(time())
-    
+
     event = [
-        0,          
-        pub_key,    # Public key
-        t,          # Timestamp
-        kind,       # Event kind
-        tags,       # Tags 
-        content,    # Content of the messages
+        0,
+        pub_key,  # Public key
+        t,  # Timestamp
+        kind,  # Event kind
+        tags,  # Tags
+        content,  # Content of the messages
     ]
     return event
 
 
-def build_signed_event(message: str, priv_key: str, pub_key: str, tags: list[str], kind: int):
+def build_signed_event(
+    message: str, priv_key: PrivateKey, pub_key: str, tags: list[str], kind: int
+):
     """
     Creates and signs a Nostr event using Schnorr signature.
 
@@ -56,17 +61,17 @@ def build_signed_event(message: str, priv_key: str, pub_key: str, tags: list[str
     """
     # Create the unsigned event data
     event = build_unsigned_event(message, pub_key, tags, kind)
-    event_json = dumps(event, ensure_ascii = False, separators = (',', ':'))
-    
+    event_json = dumps(event, ensure_ascii=False, separators=(",", ":"))
+
     # Calculate the signature over the digest of the unsigned message
     hash = sha256()
     hash.update(event_json.encode("utf-8"))
     event_hash = hash.digest()
     sig = priv_key.sign_schnorr(event_hash)
-    
+
     # Assemble and output the message to be published, adding the digest and the signature
     event_signed = {
-        "id": event_hash.hex(),  # SHA-256 hash of the serialized event content 
+        "id": event_hash.hex(),  # SHA-256 hash of the serialized event content
         "pubkey": event[1],
         "created_at": event[2],
         "kind": event[3],
@@ -76,8 +81,8 @@ def build_signed_event(message: str, priv_key: str, pub_key: str, tags: list[str
     }
     # Relay expects the event to be in a list format
     relay_payload = [
-        "EVENT",  
-        event_signed,  
+        "EVENT",
+        event_signed,
     ]
-    
-    return dumps(relay_payload, ensure_ascii = False)
+
+    return dumps(relay_payload, ensure_ascii=False)
