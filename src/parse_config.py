@@ -13,10 +13,10 @@ Expected config fields:
 - [IMAGE_HOSTING] IMAGE_HOST (must be "substack", "wala", or "imgur")
 
 If WALA is selected:
-- [IMAGE_HOSTING] WALA_URL
+- [WALA] WALA_URL
 
 If Imgur is selected:
-- [IMAGE_HOSTING] IMGUR_CLIENT_ID
+- [IMGUR] IMGUR_CLIENT_ID
 
 Raises:
 - Exits the program with a message from `errors` if required fields are missing or invalid.
@@ -41,6 +41,22 @@ from errors import (
     MISSING_EVENT_TYPE,
     error_and_exit,
 )
+
+
+def parse_relays(relays_str: str):
+    """Parse relay string into a clean list of relay URLs, skipping comments and duplicates."""
+    relay_candidates = re.split(r"[,\s]+", relays_str)
+
+    relays = []
+    seen = set()
+    for entry in relay_candidates:
+        entry = entry.strip()
+        if not entry or entry.startswith("#") or entry.startswith(";"):
+            continue
+        if entry not in seen:
+            relays.append(entry)
+            seen.add(entry)
+    return relays
 
 
 def parse_config(path_to_config: str):
@@ -81,24 +97,23 @@ def parse_config(path_to_config: str):
     imgur_client_id = ""
     if image_host == "wala":
         try:
-            wala_url = config.get("IMAGE_HOSTING_WALA_URL")
+            wala_url = config.get("WALA_WALA_URL")
         except KeyError:
             error_and_exit(MISSING_WALA_URL)
         if wala_url is None or wala_url == "":
             error_and_exit(MISSING_WALA_URL)
     elif image_host == "imgur":
         try:
-            imgur_client_id = config.get("IMAGE_HOSTING_IMGUR_CLIENT_ID")
+            imgur_client_id = config.get("IMGUR_IMGUR_CLIENT_ID")
         except KeyError:
             error_and_exit(MISSING_IMGUR_CLIENT_ID)
         if imgur_client_id is None or imgur_client_id == "":
             error_and_exit(MISSING_IMGUR_CLIENT_ID)
 
     # Convert relay string to list
-    # Split by any combination of commas and whitespace (incl. newlines), and remove extra spaces
-    relays = [
-        relay.strip() for relay in re.split(r"[,\s]+", relays_str) if relays_str.strip()
-    ]
+    relays = parse_relays(relays_str)
+    if not relays:
+        error_and_exit(MISSING_RELAYS)
 
     if private_key == "x":
         priv_key, pub_key = keys.generate_keys()
