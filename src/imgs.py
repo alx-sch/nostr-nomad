@@ -222,17 +222,21 @@ def handle_imgs(paths: Paths, post: Post, user: User, counts: list[int]):
 
         if uploadable and local_hash not in post.image_hashes:
             new_url, delete_token = upload_image(filepath, user, local_hash)
+            
             if not new_url:
                 print_yellow(
                     f"→ Image upload failed for {filename}. Using original URL."
                 )
                 counts[1] -= 1
             cache[filename]["new_url"] = new_url
+            
             if delete_token and user.image_host == "imgur":
                 cache_imgur = load_cache(os.path.join(paths.cache_root, "imgur_delete_hash.json"))
                 cache_imgur[filename] = delete_token
                 save_cache(os.path.join(paths.cache_root, "imgur_delete_hash.json"), cache_imgur)
+                
             counts[1] += 1
+            
         post.image_hashes.append(local_hash)
 
         if new_url:
