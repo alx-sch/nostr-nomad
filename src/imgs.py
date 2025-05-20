@@ -214,8 +214,7 @@ def handle_imgs(paths: Paths, post: Post, user: User, counts: list[int]):
             cache[filename] = {
                 "ori_url": url,
                 "new_url": None,
-                "delete_token": None,
-                "local_hash": local_hash,
+                "hash": local_hash
             }
 
         if downloaded:
@@ -229,7 +228,10 @@ def handle_imgs(paths: Paths, post: Post, user: User, counts: list[int]):
                 )
                 counts[1] -= 1
             cache[filename]["new_url"] = new_url
-            cache[filename]["delete_token"] = delete_token
+            if delete_token and user.image_host == "imgur":
+                cache_imgur = load_cache(os.path.join(paths.cache_root, "imgur_delete_hash.json"))
+                cache_imgur[filename] = delete_token
+                save_cache(os.path.join(paths.cache_root, "imgur_delete_hash.json"), cache_imgur)
             counts[1] += 1
         post.image_hashes.append(local_hash)
 
