@@ -97,7 +97,12 @@ Provide the following information in the `user_entries/config.ini` file:
     - **Full Cleanup**   
         `make clean-all` — Removes everything: environment, docs, cache/archive, and Substack export data.
   
-5. XXXX (cache/archive etc.)
+5. **Review Cache & Archive**   
+   After running, `nostr-nomad` maintains a local cache in `cache/`:
+   - `posts.json` — Tracks which posts have been published to which relays (prevents duplicates on re-runs).
+   - `images.json` — Maps original image URLs to re-hosted URLs and local file paths.
+   - `imgur_delete_hash.json` — Stores Imgur delete tokens so you can remove uploaded images later.
+   - `posts/` and `images/` — Local copies of downloaded post content and images.
 
 --- 
 
@@ -114,48 +119,33 @@ make uninstall
 make install
 ```
 
-relay publishing issues (timeout, incorrect imgur ID etc)
+- **Relay publishing failures (timeout, rejected events)**
+  - Verify relay URLs are correct and reachable.
+  - Some relays reject rapid-fire publishing — increase the delay between posts.
+  - Some relays require your public key to be pre-authorized.
 
+- **Imgur upload errors**
+  - Double-check your `imgur_client_id` in `config.ini`.
+  - Imgur rate-limits anonymous uploads — wait and retry if you hit a 429 response.
 
 --- 
 
-## XXXX TBD
+## Known Limitations
 
-- Short-form vs Long-form message
-- not all clients support long-form message or preview of all hyperlinks (eg. while most support previewing .jpeg not all support .avif
-- some relays don't seem to like 'fast publishing' --> increase delay between posts (see fct `publish_posts`).
+- **Short-form vs. long-form:** Short-form notes (`kind:1`) strip all formatting. Use `blog` mode if you need Markdown headings, links, or embedded images.
+- **Client compatibility:** Not all Nostr clients support long-form content (`kind:30023`) or preview all image formats (e.g., most support `.jpeg` but not all support `.avif`).
+- **Relay speed:** Some relays reject events published in quick succession — increase the delay between posts if you experience dropped messages.
+
+#### Example Output
 
 <p align="center">
     <img src=".assets/running_nostr-nomad_2.png" width="600" alt="running_nostr-nomad_2.png"/>
 </p>
 
-```python
-import requests
-
-def delete_images_from_imgur(cache: dict, client_id: str):
-    """
-    Deletes images from Imgur using delete tokens stored in the cache 'image.json'.
-
-    Parameters:
-        cache (dict): 'image.json' as created by bnostr-nomad.
-        client_id (str): Imgur API client ID.
-    """
-    headers = {"Authorization": f"Client-ID {client_id}"}
-    
-    for filename, info in cache.items():
-        delete_token = info.get("delete_token")
-        if not delete_token:
-            print(f"Skipping {filename}: no delete token available.")
-            continue
-
-        url = f"https://api.imgur.com/3/image/{delete_token}"
-        response = requests.delete(url, headers=headers)
-
-        if response.status_code == 200:
-            print(f"Deleted {filename} successfully.")
-        else:
-            print(f"Failed to delete {filename}: {response.status_code} - {response.text}")
-```
+The tool reports per-relay status for each post:
+- **OK** — Successfully published.
+- **Error** — Relay unreachable (check the URL or ensure the relay is running).
+- **Already published. Skipping this relay.** — Post was previously sent to this relay (tracked via the local cache).
       
 ---
 
@@ -248,8 +238,8 @@ Below is a setup guide for `nostr-rs-relay`, but any other compatible relay shou
 
    If everything is set up correctly, you should now see events published to your local Nostr relay.
 
-   ---
+---
 
-   ## Acknowledgements
+## Acknowledgements
 
-   We'd like to thank [lash](https://github.com/nolash) for providing the excellent [blog post](https://manbytesgnu.org/hello-nostr-with-python.html), which helped us set up local relays and figure out how to send events to them. Lash has also been a mentor throughout this project.
+We'd like to thank [lash](https://github.com/nolash) for providing the excellent [blog post](https://manbytesgnu.org/hello-nostr-with-python.html), which helped us set up local relays and figure out how to send events to them. Lash has also been a mentor throughout this project.
