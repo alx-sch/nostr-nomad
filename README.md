@@ -121,12 +121,12 @@ make install
 
 - **Relay publishing failures (timeout, rejected events)**
   - Verify relay URLs are correct and reachable.
-  - Some relays reject rapid-fire publishing — increase the delay between posts.
+  - Some relays reject rapid-fire publishing; increase the delay between posts.
   - Some relays require your public key to be pre-authorized.
 
 - **Imgur upload errors**
   - Double-check your `imgur_client_id` in `config.ini`.
-  - Imgur rate-limits anonymous uploads — wait and retry if you hit a 429 response.
+  - Imgur rate-limits anonymous uploads; wait and retry if you hit a `429` response.
 
 --- 
 
